@@ -14,10 +14,7 @@ import { ChatArea } from '@/components/ChatArea';
 import { ChatInput } from '@/components/ChatInput';
 import { DeveloperPanel } from '@/components/DeveloperPanel';
 import { PromptEngineeringTab } from '@/components/PromptEngineering/PromptEngineeringTab';
-import { LanguageSelector } from '@/components/Settings/LanguageSelector';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { SettingsPanel } from '@/components/Settings/SettingsPanel';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Message {
@@ -58,13 +55,13 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('chat');
 
   // Current conversation data
-  const { data: currentConversation } = useQuery({
+  const { data: currentConversation } = useQuery<Conversation>({
     queryKey: ['/api/conversations', currentConversationId],
     enabled: !!currentConversationId,
     retry: false,
   });
 
-  const messages = currentConversation?.messages || [];
+  const messages: Message[] = currentConversation?.messages || [];
 
   // Create new conversation
   const createConversationMutation = useMutation({
@@ -291,12 +288,12 @@ export default function Home() {
 
   // Handle message regeneration
   const handleMessageRegenerate = useCallback(async (messageId: number) => {
-    const message = messages.find(m => m.id === messageId);
+    const message = messages.find((m: Message) => m.id === messageId);
     if (!message || !currentConversationId) return;
 
     // Find the previous user message
-    const messageIndex = messages.findIndex(m => m.id === messageId);
-    const userMessage = messages.slice(0, messageIndex).reverse().find(m => m.role === 'user');
+    const messageIndex = messages.findIndex((m: Message) => m.id === messageId);
+    const userMessage = messages.slice(0, messageIndex).reverse().find((m: Message) => m.role === 'user');
     
     if (!userMessage) return;
 
@@ -364,11 +361,11 @@ export default function Home() {
 
   // Extract current code from messages for dev mode
   const currentCode = messages
-    .filter(m => m.role === 'assistant')
-    .map(m => m.content)
+    .filter((m: Message) => m.role === 'assistant')
+    .map((m: Message) => m.content)
     .join('\n')
     .match(/```[\s\S]*?```/g)
-    ?.map(block => block.replace(/```\w*\n?/, '').replace(/```$/, ''))
+    ?.map((block: string) => block.replace(/```\w*\n?/, '').replace(/```$/, ''))
     .join('\n') || '';
 
   if (authLoading) {
@@ -435,12 +432,12 @@ export default function Home() {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <div className="border-b border-slate-200 px-4">
-            <TabsList className="grid w-full max-w-md grid-cols-4">
-              <TabsTrigger value="chat">{t('chat')}</TabsTrigger>
-              <TabsTrigger value="prompt">{t('promptEngineering')}</TabsTrigger>
-              <TabsTrigger value="files">{t('files')}</TabsTrigger>
-              <TabsTrigger value="settings">{t('settings')}</TabsTrigger>
+          <div className="border-b border-slate-200 px-4 py-3 bg-white">
+            <TabsList className="grid w-full max-w-lg grid-cols-4 h-11">
+              <TabsTrigger value="chat" className="text-sm font-medium">{t('chat')}</TabsTrigger>
+              <TabsTrigger value="prompt" className="text-sm font-medium">Prompt Engineering</TabsTrigger>
+              <TabsTrigger value="files" className="text-sm font-medium">{t('files')}</TabsTrigger>
+              <TabsTrigger value="settings" className="text-sm font-medium">{t('settings')}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -484,28 +481,8 @@ export default function Home() {
             </div>
           </TabsContent>
 
-          <TabsContent value="settings" className="flex-1 p-6 m-0">
-            <div className="max-w-2xl space-y-6">
-              <h2 className="text-2xl font-bold">{t('settings')}</h2>
-              
-              <div className="space-y-4">
-                <LanguageSelector />
-                
-                <div className="space-y-2">
-                  <Label>{t('systemPrompt')}</Label>
-                  <Textarea
-                    placeholder={t('systemPromptPlaceholder')}
-                    value={user?.preferences?.systemPrompt || ''}
-                    onChange={(e) => {
-                      // Update user preferences
-                      // This would call the API to update preferences
-                    }}
-                    className="min-h-[120px]"
-                  />
-                  <Button className="mt-2">{t('save')}</Button>
-                </div>
-              </div>
-            </div>
+          <TabsContent value="settings" className="flex-1 m-0 overflow-y-auto">
+            <SettingsPanel />
           </TabsContent>
         </Tabs>
       </div>

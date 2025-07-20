@@ -52,7 +52,7 @@ export function ChatSidebar({
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: conversations = [], isLoading } = useQuery({
+  const { data: conversations = [], isLoading } = useQuery<Conversation[]>({
     queryKey: ['/api/conversations'],
     retry: false,
   });
@@ -111,34 +111,11 @@ export function ChatSidebar({
         </div>
       </div>
 
-      {/* User Profile */}
-      <div className="p-4 border-b border-slate-200">
-        <div className="flex items-center space-x-3">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={user.profileImageUrl || ''} alt={user.firstName || 'User'} />
-            <AvatarFallback>
-              {(user.firstName?.[0] || user.email?.[0] || 'U').toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">
-              {user.firstName && user.lastName 
-                ? `${user.firstName} ${user.lastName}`
-                : user.email || 'User'}
-            </p>
-            <p className="text-xs text-slate-500 truncate">{user.email}</p>
-          </div>
-          <Button variant="ghost" size="sm" className="p-1">
-            <Settings className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-
       {/* New Chat Button */}
-      <div className="p-4">
+      <div className="p-4 border-b border-slate-200">
         <Button 
           onClick={onNewChat}
-          className="w-full flex items-center space-x-3 bg-blue-600 hover:bg-blue-700"
+          className="w-full flex items-center justify-center space-x-3 bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" />
           <span>New Chat</span>
@@ -161,7 +138,7 @@ export function ChatSidebar({
               <p className="text-sm">No conversations yet</p>
             </div>
           ) : (
-            conversations.map((conversation: Conversation) => (
+            conversations.map((conversation) => (
               <motion.button
                 key={conversation.id}
                 initial={{ opacity: 0, y: 10 }}
@@ -176,12 +153,12 @@ export function ChatSidebar({
               >
                 <MessageSquare className="w-4 h-4 text-slate-400 flex-shrink-0" />
                 <span className="truncate flex-1">{conversation.title}</span>
-                <button
+                <div
                   onClick={(e) => handleDeleteConversation(e, conversation.id)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 rounded transition-all"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 rounded transition-all cursor-pointer"
                 >
                   <X className="w-3 h-3" />
-                </button>
+                </div>
               </motion.button>
             ))
           )}
@@ -208,6 +185,26 @@ export function ChatSidebar({
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      {/* User Profile - Moved to bottom */}
+      <div className="p-4 border-t border-slate-200 mt-auto">
+        <div className="flex items-center space-x-3">
+          <Avatar className="w-10 h-10">
+            <AvatarImage src={user?.profileImageUrl || ''} alt={user?.firstName || 'User'} />
+            <AvatarFallback>
+              {(user?.firstName?.[0] || user?.email?.[0] || 'U').toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">
+              {user?.firstName && user?.lastName 
+                ? `${user.firstName} ${user.lastName}`
+                : user?.email || 'User'}
+            </p>
+            <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

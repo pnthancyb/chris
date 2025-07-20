@@ -1,0 +1,31 @@
+client:536 WebSocket connection to 'wss://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/?token=4nV6IiNhIlNm' failed: 
+setupWebSocket @ client:536
+client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=4nV6IiNhIlNm' is invalid.
+    at setupWebSocket (client:536:19)
+    at fallback (client:509:16)
+    at WebSocket.<anonymous> (client:555:7)
+chunk-WERSD76P.js?v=62d84dbd:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+chunk-WERSD76P.js?v=62d84dbd:521 Warning: validateDOMNesting(...): <button> cannot appear as a descendant of <button>.
+    at button
+    at button
+    at MotionComponent (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js?v=62d84dbd:6536:40)
+    at PresenceChild (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js?v=62d84dbd:7742:24)
+    at AnimatePresence (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js?v=62d84dbd:7800:26)
+    at nav
+    at div
+    at ChatSidebar (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/src/components/ChatSidebar.tsx:42:3)
+    at div
+    at MotionComponent (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js?v=62d84dbd:6536:40)
+    at div
+    at Home (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/src/pages/Home.tsx:40:44)
+    at Route (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=62d84dbd:323:16)
+    at Switch (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=62d84dbd:379:17)
+    at Router (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/src/App.tsx?v=BNtQLiw4xCCGwgTmvydGL:30:42)
+    at Provider (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-PLT6GTVM.js?v=62d84dbd:38:15)
+    at TooltipProvider (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=62d84dbd:63:5)
+    at LanguageProvider (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/src/components/LanguageProvider.tsx:19:36)
+    at QueryClientProvider (https://607b67bb-233a-4e83-a458-d8fb798ae6c5-00-1q1362z9z3pfn.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=62d84dbd:2805:3)
+    at App
+printWarning @ chunk-WERSD76P.js?v=62d84dbd:521
+useWebSocket.ts:24 WebSocket connected
+content.js:1 Uncaught (in promise) The message port closed before a response was received.

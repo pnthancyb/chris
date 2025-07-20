@@ -19,15 +19,85 @@ export const SUPPORTED_LANGUAGES = {
     name: 'Spanish', 
     nativeName: 'Español'
   },
+  fr: {
+    code: 'fr',
+    name: 'French',
+    nativeName: 'Français'
+  },
+  de: {
+    code: 'de',
+    name: 'German',
+    nativeName: 'Deutsch'
+  },
+  it: {
+    code: 'it',
+    name: 'Italian',
+    nativeName: 'Italiano'
+  },
+  pt: {
+    code: 'pt',
+    name: 'Portuguese',
+    nativeName: 'Português'
+  },
+  ru: {
+    code: 'ru',
+    name: 'Russian',
+    nativeName: 'Русский'
+  },
+  zh: {
+    code: 'zh',
+    name: 'Chinese',
+    nativeName: '中文'
+  },
   ja: {
     code: 'ja',
     name: 'Japanese',
     nativeName: '日本語'
   },
+  ko: {
+    code: 'ko',
+    name: 'Korean',
+    nativeName: '한국어'
+  },
   hi: {
     code: 'hi',
     name: 'Hindi',
     nativeName: 'हिन्दी'
+  },
+  ar: {
+    code: 'ar',
+    name: 'Arabic',
+    nativeName: 'العربية'
+  },
+  fa: {
+    code: 'fa',
+    name: 'Persian',
+    nativeName: 'فارسی'
+  },
+  nl: {
+    code: 'nl',
+    name: 'Dutch',
+    nativeName: 'Nederlands'
+  },
+  sv: {
+    code: 'sv',
+    name: 'Swedish',
+    nativeName: 'Svenska'
+  },
+  no: {
+    code: 'no',
+    name: 'Norwegian',
+    nativeName: 'Norsk'
+  },
+  da: {
+    code: 'da',
+    name: 'Danish',
+    nativeName: 'Dansk'
+  },
+  fi: {
+    code: 'fi',
+    name: 'Finnish',
+    nativeName: 'Suomi'
   }
 } as const;
 
@@ -271,8 +341,22 @@ export const getLanguagePromptPrefix = (languageCode: LanguageCode): string => {
     tr: "Turkish", 
     ku: "Kurdish (Kurmanji)",
     es: "Spanish",
+    fr: "French",
+    de: "German",
+    it: "Italian",
+    pt: "Portuguese",
+    ru: "Russian",
+    zh: "Chinese",
     ja: "Japanese",
-    hi: "Hindi"
+    ko: "Korean",
+    hi: "Hindi",
+    ar: "Arabic",
+    fa: "Persian",
+    nl: "Dutch",
+    sv: "Swedish",
+    no: "Norwegian",
+    da: "Danish",
+    fi: "Finnish"
   };
   
   return `Please respond only in ${languageNames[languageCode]}, never use another language unless explicitly asked to translate.`;
