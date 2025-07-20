@@ -1,0 +1,359 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(240, 10%, 3.9%);
+  --muted: hsl(240, 4.8%, 95.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(240, 10%, 3.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(240, 10%, 3.9%);
+  --border: hsl(240, 5.9%, 90%);
+  --input: hsl(240, 5.9%, 90%);
+  --primary: hsl(221.2, 83.2%, 53.3%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222.2, 84%, 4.9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(221.2, 83.2%, 53.3%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(222.2, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217.2, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(222.2, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222.2, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217.2, 32.6%, 17.5%);
+  --input: hsl(217.2, 32.6%, 17.5%);
+  --primary: hsl(217.2, 91.2%, 59.8%);
+  --primary-foreground: hsl(222.2, 84%, 4.9%);
+  --secondary: hsl(217.2, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217.2, 32.6%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(217.2, 91.2%, 59.8%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(240, 4.8%, 95.9%);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(240, 5%, 64.9%);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(240, 5%, 54.9%);
+  }
+
+  /* Dark mode scrollbar */
+  .dark ::-webkit-scrollbar-track {
+    background: hsl(217.2, 32.6%, 17.5%);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: hsl(215, 20.2%, 65.1%);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: hsl(215, 20.2%, 75.1%);
+  }
+}
+
+@layer components {
+  /* Typing animation for streaming messages */
+  .typing-animation {
+    border-right: 2px solid hsl(221.2, 83.2%, 53.3%);
+    animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+
+  /* Smooth gradient backgrounds */
+  .gradient-bg {
+    background: linear-gradient(135deg, hsl(221.2, 83.2%, 53.3%) 0%, hsl(142.1, 76.2%, 36.3%) 100%);
+  }
+
+  /* Glass morphism effect */
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-effect {
+    background: rgba(34, 42, 53, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Message bubble animations */
+  .message-enter {
+    animation: message-slide-up 0.3s ease-out forwards;
+  }
+
+  .message-thinking {
+    animation: thinking-pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Code block enhancements */
+  .code-block {
+    @apply bg-slate-900 text-slate-100 rounded-lg overflow-hidden;
+  }
+
+  .code-block pre {
+    @apply p-4 overflow-x-auto text-sm;
+  }
+
+  /* Improved focus states */
+  .focus-enhanced:focus {
+    @apply ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Enhanced hover states */
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@layer utilities {
+  /* Text selection */
+  .select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Smooth scrolling */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Responsive text */
+  .text-responsive {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(1.125rem, 3vw, 1.25rem);
+  }
+
+  .text-responsive-xl {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes message-slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes thinking-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: hsl(221.2, 83.2%, 53.3%);
+  }
+}
+
+/* Prose styling for message content */
+.prose-message {
+  @apply text-sm leading-relaxed;
+}
+
+.prose-message p {
+  @apply mb-3 last:mb-0;
+}
+
+.prose-message ul, .prose-message ol {
+  @apply mb-3 pl-6;
+}
+
+.prose-message li {
+  @apply mb-1;
+}
+
+.prose-message code {
+  @apply bg-slate-100 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.dark .prose-message code {
+  @apply bg-slate-800 text-slate-200;
+}
+
+.prose-message pre {
+  @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm;
+}
+
+.prose-message blockquote {
+  @apply border-l-4 border-slate-300 pl-4 italic;
+}
+
+.dark .prose-message blockquote {
+  @apply border-slate-600;
+}
+
+/* Loading states */
+.loading-skeleton {
+  @apply animate-pulse bg-slate-200 rounded;
+}
+
+.dark .loading-skeleton {
+  @apply bg-slate-700;
+}
+
+/* Interactive elements */
+.interactive-element {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.interactive-element:hover {
+  @apply scale-105;
+}
+
+.interactive-element:active {
+  @apply scale-95;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .mobile-optimized {
+    @apply text-sm;
+  }
+
+  .mobile-hidden {
+    @apply hidden;
+  }
+
+  .mobile-full {
+    @apply w-full;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-friendly {
+    @apply text-black bg-white;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .contrast-enhanced {
+    @apply border-2 border-black;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

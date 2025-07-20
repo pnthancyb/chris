@@ -1,0 +1,349 @@
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from "ws";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { storage } from "./storage";
+import { setupAuth, isAuthenticated } from "./replitAuth";
+import { groqService } from "./services/groqService";
+import { fileService } from "./services/fileService";
+import { insertConversationSchema, insertMessageSchema, insertFileSchema } from "@shared/schema";
+
+const upload = multer({
+  dest: 'uploads/',
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB
+  },
+});
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Auth middleware
+  await setupAuth(app);
+
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // User preferences
+  app.patch('/api/user/preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.updateUserPreferences(userId, req.body);
+      res.json(user);
+    } catch (error) {
+      console.error("Error updating preferences:", error);
+      res.status(500).json({ message: "Failed to update preferences" });
+    }
+  });
+
+  // Conversations
+  app.get('/api/conversations', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const conversations = await storage.getUserConversations(userId);
+      res.json(conversations);
+    } catch (error) {
+      console.error("Error fetching conversations:", error);
+      res.status(500).json({ message: "Failed to fetch conversations" });
+    }
+  });
+
+  app.post('/api/conversations', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const conversationData = insertConversationSchema.parse({
+        ...req.body,
+        userId,
+      });
+      const conversation = await storage.createConversation(conversationData);
+      res.json(conversation);
+    } catch (error) {
+      console.error("Error creating conversation:", error);
+      res.status(500).json({ message: "Failed to create conversation" });
+    }
+  });
+
+  app.get('/api/conversations/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const conversationId = parseInt(req.params.id);
+      const conversation = await storage.getConversation(conversationId, userId);
+      
+      if (!conversation) {
+        return res.status(404).json({ message: "Conversation not found" });
+      }
+
+      const messages = await storage.getConversationMessages(conversationId);
+      res.json({ ...conversation, messages });
+    } catch (error) {
+      console.error("Error fetching conversation:", error);
+      res.status(500).json({ message: "Failed to fetch conversation" });
+    }
+  });
+
+  app.patch('/api/conversations/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const conversationId = parseInt(req.params.id);
+      const conversation = await storage.updateConversation(conversationId, req.body);
+      res.json(conversation);
+    } catch (error) {
+      console.error("Error updating conversation:", error);
+      res.status(500).json({ message: "Failed to update conversation" });
+    }
+  });
+
+  app.delete('/api/conversations/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const conversationId = parseInt(req.params.id);
+      await storage.deleteConversation(conversationId, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
+      res.status(500).json({ message: "Failed to delete conversation" });
+    }
+  });
+
+  // Messages
+  app.post('/api/conversations/:id/messages', isAuthenticated, async (req: any, res) => {
+    try {
+      const conversationId = parseInt(req.params.id);
+      const messageData = insertMessageSchema.parse({
+        ...req.body,
+        conversationId,
+      });
+      const message = await storage.createMessage(messageData);
+      res.json(message);
+    } catch (error) {
+      console.error("Error creating message:", error);
+      res.status(500).json({ message: "Failed to create message" });
+    }
+  });
+
+  app.patch('/api/messages/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const messageId = parseInt(req.params.id);
+      const message = await storage.updateMessage(messageId, req.body);
+      res.json(message);
+    } catch (error) {
+      console.error("Error updating message:", error);
+      res.status(500).json({ message: "Failed to update message" });
+    }
+  });
+
+  app.delete('/api/messages/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const messageId = parseInt(req.params.id);
+      await storage.deleteMessage(messageId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      res.status(500).json({ message: "Failed to delete message" });
+    }
+  });
+
+  // File upload
+  app.post('/api/files/upload', isAuthenticated, upload.single('file'), async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const file = req.file;
+
+      if (!file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const fileData = insertFileSchema.parse({
+        userId,
+        filename: file.filename,
+        originalName: file.originalname,
+        mimeType: file.mimetype,
+        size: file.size,
+        path: file.path,
+      });
+
+      const savedFile = await storage.createFile(fileData);
+
+      // Process file asynchronously
+      fileService.processFile(savedFile).catch(console.error);
+
+      res.json(savedFile);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      res.status(500).json({ message: "Failed to upload file" });
+    }
+  });
+
+  app.get('/api/files', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const files = await storage.getUserFiles(userId);
+      res.json(files);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+      res.status(500).json({ message: "Failed to fetch files" });
+    }
+  });
+
+  app.delete('/api/files/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const fileId = parseInt(req.params.id);
+      
+      const file = await storage.getFile(fileId, userId);
+      if (file) {
+        // Delete physical file
+        try {
+          fs.unlinkSync(file.path);
+        } catch (err) {
+          console.warn("Failed to delete physical file:", err);
+        }
+      }
+
+      await storage.deleteFile(fileId, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      res.status(500).json({ message: "Failed to delete file" });
+    }
+  });
+
+  // Voice transcription
+  app.post('/api/voice/transcribe', isAuthenticated, upload.single('audio'), async (req: any, res) => {
+    try {
+      const audioFile = req.file;
+      if (!audioFile) {
+        return res.status(400).json({ message: "No audio file provided" });
+      }
+
+      const transcription = await groqService.transcribeAudio(audioFile.path);
+      
+      // Clean up temp file
+      fs.unlinkSync(audioFile.path);
+
+      res.json({ text: transcription });
+    } catch (error) {
+      console.error("Error transcribing audio:", error);
+      res.status(500).json({ message: "Failed to transcribe audio" });
+    }
+  });
+
+  // Text-to-speech
+  app.post('/api/voice/synthesize', isAuthenticated, async (req: any, res) => {
+    try {
+      const { text } = req.body;
+      if (!text) {
+        return res.status(400).json({ message: "No text provided" });
+      }
+
+      const audioBuffer = await groqService.synthesizeSpeech(text);
+      
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': audioBuffer.length,
+      });
+      res.send(audioBuffer);
+    } catch (error) {
+      console.error("Error synthesizing speech:", error);
+      res.status(500).json({ message: "Failed to synthesize speech" });
+    }
+  });
+
+  // Memory operations
+  app.get('/api/memory', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { key } = req.query;
+      const memory = await storage.getUserMemory(userId, key as string);
+      res.json(memory);
+    } catch (error) {
+      console.error("Error fetching memory:", error);
+      res.status(500).json({ message: "Failed to fetch memory" });
+    }
+  });
+
+  app.post('/api/memory', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const memory = await storage.createMemory({
+        ...req.body,
+        userId,
+      });
+      res.json(memory);
+    } catch (error) {
+      console.error("Error creating memory:", error);
+      res.status(500).json({ message: "Failed to create memory" });
+    }
+  });
+
+  const httpServer = createServer(app);
+
+  // WebSocket server for real-time chat
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+
+  wss.on('connection', async (ws: WebSocket, req) => {
+    console.log('WebSocket connection established');
+
+    ws.on('message', async (data) => {
+      try {
+        const message = JSON.parse(data.toString());
+        
+        if (message.type === 'chat') {
+          const { conversationId, content, model, thinkingMode, files } = message;
+          
+          // Get AI response
+          const response = await groqService.getChatCompletion({
+            model: model || 'llama-3.3-70b-versatile',
+            messages: [{ role: 'user', content }],
+            stream: true,
+            thinkingMode,
+          });
+
+          // Stream response back to client
+          if (response.stream) {
+            for await (const chunk of response.stream) {
+              if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                  type: 'chat-stream',
+                  content: chunk,
+                  thinking: response.thinking,
+                }));
+              }
+            }
+          }
+
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+              type: 'chat-complete',
+              content: response.content,
+              thinking: response.thinking,
+              model: response.model,
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('WebSocket error:', error);
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'error',
+            message: 'Failed to process message',
+          }));
+        }
+      }
+    });
+
+    ws.on('close', () => {
+      console.log('WebSocket connection closed');
+    });
+  });
+
+  return httpServer;
+}

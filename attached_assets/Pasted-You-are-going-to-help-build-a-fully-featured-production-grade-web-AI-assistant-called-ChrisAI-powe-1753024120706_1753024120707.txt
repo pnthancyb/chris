@@ -1,0 +1,100 @@
+You are going to help build a fully-featured, production-grade web AI assistant called ChrisAI, powered by Groq API and multiple advanced open-source models. The goal is to make a better, cleaner, and more intelligent assistant interface than ChatGPT, with deep user personalization, advanced input/output handling, and a minimal, modern UI/UX.
+
+Here’s what you must include in the final output: full stack architecture ideas, core component structure, and code design notes — but especially HTML/CSS/JS React + backend logic, components and folders.
+
+Features (Must Include):
+🔹 Models (via Groq API):
+Chat Models:
+
+llama-3.1-8b-instant
+
+llama-3.3-70b-versatile
+
+llama3-70b-8192
+
+llama3-8b-8192
+
+meta-llama/llama-4-maverick-17b-128e-instruct
+
+meta-llama/llama-4-scout-17b-16e-instruct (used for image understanding too)
+
+mistral-saba-24b
+
+moonshotai/kimi-k2-instruct
+
+gemma2-9b-it
+
+Voice Transcription:
+
+whisper-large-v3
+
+Voice Output (TTS):
+
+playai-tts
+
+Thinking Mode (separate reasoning):
+
+deepseek-r1-distill-llama-70b
+
+🔹 Core Functionalities:
+Modern Minimal UI (cleaner and smoother than ChatGPT, ideally Tailwind-based + Framer Motion)
+
+User memory system: persistent profiles stored in database (name, preferences, tone, habits, chat context)
+
+Editable messages: user can edit their past message, and AI will regenerate from the new message
+
+"Thinking Mode":
+
+User clicks “Think”, then a separate response section appears with reasoning from the deepseek model
+
+The final answer is shown separately below
+
+Text animation: AI responses appear word-by-word, animated
+
+Audio input: users can speak via mic (transcribed using whisper-large-v3)
+
+Text-to-speech output: when clicked, playai-tts reads the AI’s response aloud
+
+Uploadable Files:
+
+Users can upload PDFs, images, audio, text files, docx, etc.
+
+AI can analyze and talk about the files in natural language
+
+Image understanding (via meta-llama/llama-4-scout-17b-16e-instruct)
+
+Rich formatting: bold, italic, code support in chat
+
+Syntax-highlighted code blocks, collapsible if too long
+
+"Developer Mode": if AI detects code, extra panel opens for interactive coding support or debugging
+
+PDF Chat: seamless natural language conversation about uploaded PDFs and other readable files
+
+User accounts:
+
+Secure login/signup
+
+Profile picture, preferences
+
+History & memory per user
+
+Message Actions:
+
+Delete / Edit / Copy / Regenerate
+
+🔹 Architecture Suggestions:
+Frontend: React + TailwindCSS + Framer Motion
+
+Backend: Node.js + Express (or FastAPI), connected to Groq API
+
+Database: PostgreSQL or MongoDB for user data, memory, history
+
+File Handling: Upload files to cloud (e.g., Cloudflare R2, AWS S3) and process via backend
+
+Authentication: JWT or Clerk/Auth0
+
+🔹 Environment:
+Use .env file for Groq API Key and secret credentials
+
+Please structure the output in a clean and organized way, including a basic file structure and example components if possible. You may optionally include UI wireframes or layout suggestions in markdown
