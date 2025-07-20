@@ -15,6 +15,8 @@ import { ChatInput } from '@/components/ChatInput';
 import { DeveloperPanel } from '@/components/DeveloperPanel';
 import { PromptEngineeringTab } from '@/components/PromptEngineering/PromptEngineeringTab';
 import { SettingsPanel } from '@/components/Settings/SettingsPanel';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Settings } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Message {
@@ -53,6 +55,7 @@ export default function Home() {
   const [thinkingContent, setThinkingContent] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [activeTab, setActiveTab] = useState('chat');
+  const [showSettings, setShowSettings] = useState(false);
 
   // Current conversation data
   const { data: currentConversation } = useQuery<Conversation>({
@@ -409,6 +412,7 @@ export default function Home() {
           onNewChat={handleNewChat}
           selectedModel={selectedModel}
           onModelChange={setSelectedModel}
+          onOpenSettings={() => setShowSettings(true)}
         />
       </motion.div>
 
@@ -432,13 +436,32 @@ export default function Home() {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <div className="border-b border-slate-200 px-4 py-3 bg-white">
-            <TabsList className="grid w-full max-w-lg grid-cols-4 h-11">
-              <TabsTrigger value="chat" className="text-sm font-medium">{t('chat')}</TabsTrigger>
-              <TabsTrigger value="prompt" className="text-sm font-medium">Prompt Engineering</TabsTrigger>
-              <TabsTrigger value="files" className="text-sm font-medium">{t('files')}</TabsTrigger>
-              <TabsTrigger value="settings" className="text-sm font-medium">{t('settings')}</TabsTrigger>
-            </TabsList>
+          <div className="border-b border-slate-200 px-6 py-4 bg-white">
+            <div className="flex items-center justify-between">
+              <TabsList className="grid w-full max-w-md grid-cols-3 h-10">
+                <TabsTrigger value="chat" className="text-sm font-medium">{t('chat')}</TabsTrigger>
+                <TabsTrigger value="prompt" className="text-sm font-medium">Prompts</TabsTrigger>
+                <TabsTrigger value="files" className="text-sm font-medium">Files</TabsTrigger>
+              </TabsList>
+              <div className="flex items-center space-x-4">
+                <div className="text-sm text-slate-500">
+                  {isConnected ? (
+                    <span className="text-green-600">●Connected</span>
+                  ) : (
+                    <span className="text-red-600">●Connecting...</span>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowSettings(true)}
+                  className="flex items-center space-x-2"
+                >
+                  <Settings className="w-4 h-4" />
+                  <span>Settings</span>
+                </Button>
+              </div>
+            </div>
           </div>
 
           <TabsContent value="chat" className="flex-1 flex flex-col m-0">
@@ -481,9 +504,7 @@ export default function Home() {
             </div>
           </TabsContent>
 
-          <TabsContent value="settings" className="flex-1 m-0 overflow-y-auto">
-            <SettingsPanel />
-          </TabsContent>
+
         </Tabs>
       </div>
 
@@ -494,6 +515,19 @@ export default function Home() {
         currentCode={currentCode}
         onCodeExecution={handleCodeExecution}
       />
+
+      {/* Settings Dialog */}
+      <Dialog open={showSettings} onOpenChange={setShowSettings}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Settings className="w-5 h-5" />
+              <span>Settings</span>
+            </DialogTitle>
+          </DialogHeader>
+          <SettingsPanel />
+        </DialogContent>
+      </Dialog>
 
       {/* Connection Status */}
       <AnimatePresence>

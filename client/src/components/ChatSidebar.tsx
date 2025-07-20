@@ -31,6 +31,7 @@ interface ChatSidebarProps {
   onNewChat: () => void;
   selectedModel: string;
   onModelChange: (model: string) => void;
+  onOpenSettings: () => void;
 }
 
 const AI_MODELS = [
@@ -46,7 +47,8 @@ export function ChatSidebar({
   onConversationSelect, 
   onNewChat,
   selectedModel,
-  onModelChange
+  onModelChange,
+  onOpenSettings
 }: ChatSidebarProps) {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -204,6 +206,15 @@ export function ChatSidebar({
             </p>
             <p className="text-xs text-slate-500 truncate">{user?.email}</p>
           </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-2"
+            onClick={onOpenSettings}
+            title="Settings"
+          >
+            <Settings className="w-4 h-4" />
+          </Button>
         </div>
       </div>
     </div>
