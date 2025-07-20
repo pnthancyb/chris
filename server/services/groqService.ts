@@ -163,7 +163,7 @@ class GroqService {
         response_format: "text",
       });
 
-      return transcription as string;
+      return typeof transcription === 'string' ? transcription : transcription.text;
     } catch (error) {
       console.error("Error transcribing audio:", error);
       throw new Error("Failed to transcribe audio");

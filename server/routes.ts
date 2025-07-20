@@ -67,17 +67,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User info route (supports both auth methods)
   app.get('/api/auth/user', async (req: any, res) => {
     try {
+      // Check for custom auth first
       const currentUser = getCurrentUser(req);
-      if (!currentUser) {
-        return res.status(401).json({ message: "Unauthorized" });
+      if (currentUser) {
+        const user = await storage.getUser(currentUser.id);
+        return res.json({
+          id: user?.id || currentUser.id,
+          username: user?.username,
+          email: user?.email,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          profileImageUrl: user?.profileImageUrl,
+          preferences: user?.preferences || {}
+        });
       }
 
-      const user = await storage.getUser(currentUser.id);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      // Check for Replit auth
+      if (req.user && req.isAuthenticated && req.isAuthenticated()) {
+        const user = await storage.getUser(req.user.claims.sub);
+        return res.json({
+          id: req.user.claims.sub,
+          username: req.user.claims.username,
+          email: req.user.claims.email,
+          firstName: req.user.claims.first_name,
+          lastName: req.user.claims.last_name,
+          profileImageUrl: req.user.claims.profile_image_url,
+          preferences: user?.preferences || {}
+        });
       }
 
-      res.json(user);
+      return res.status(401).json({ message: "Unauthorized" });
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -119,9 +138,10 @@ Length: ${length || 'medium'}
 
 Return ONLY the optimized prompt, nothing else. Make it clear, specific, and effective for getting the desired AI response.`;
 
-      const response = await groqService.chatCompletion([
-        { role: 'user', content: optimizePrompt }
-      ], 'llama-3.1-8b-instant');
+      const response = await groqService.getChatCompletion({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'user', content: optimizePrompt }]
+      });
 
       res.json({ 
         optimizedPrompt: response.content,
@@ -201,20 +221,27 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  // Messages
-  app.post('/api/conversations/:id/messages', isAuthenticated, async (req: any, res) => {
+  // Messages (updated to support both auth methods)
+  app.post('/api/conversations/:id/messages', async (req: any, res) => {
     try {
+      const currentUser = getCurrentUser(req);
+      if (!currentUser && !req.isAuthenticated?.()) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const conversationId = parseInt(req.params.id);
+      const metadata = req.body.metadata ? {
+        model: typeof req.body.metadata.model === 'string' ? req.body.metadata.model : undefined,
+        tokens: typeof req.body.metadata.tokens === 'number' ? req.body.metadata.tokens : undefined,
+        files: Array.isArray(req.body.metadata.files) ? req.body.metadata.files.filter((f: any) => typeof f === 'string') as string[] : undefined,
+        edited: typeof req.body.metadata.edited === 'boolean' ? req.body.metadata.edited : undefined,
+        regenerated: typeof req.body.metadata.regenerated === 'boolean' ? req.body.metadata.regenerated : undefined,
+      } : null;
+      
       const messageData = insertMessageSchema.parse({
         ...req.body,
         conversationId,
-        metadata: req.body.metadata ? {
-          model: typeof req.body.metadata.model === 'string' ? req.body.metadata.model : undefined,
-          tokens: typeof req.body.metadata.tokens === 'number' ? req.body.metadata.tokens : undefined,
-          files: Array.isArray(req.body.metadata.files) ? req.body.metadata.files : undefined,
-          edited: typeof req.body.metadata.edited === 'boolean' ? req.body.metadata.edited : undefined,
-          regenerated: typeof req.body.metadata.regenerated === 'boolean' ? req.body.metadata.regenerated : undefined,
-        } : undefined
+        metadata
       });
       const message = await storage.createMessage(messageData);
       res.json(message);
