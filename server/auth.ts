@@ -77,14 +77,24 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
 };
 
 export const getCurrentUser = (req: Request): CustomUser | null => {
+  // Debug logging
+  console.log('getCurrentUser called:', {
+    hasSession: !!req.session,
+    sessionUser: !!req.session?.user,
+    hasReqUser: !!req.user,
+    sessionId: req.session?.id
+  });
+
   // Check for custom auth session
   if (req.session?.user) {
+    console.log('Found session user:', req.session.user.id);
     return req.session.user;
   }
   
   // Check for Replit auth
   if (req.user && (req.user as any).claims) {
     const claims = (req.user as any).claims;
+    console.log('Found Replit user:', claims.sub);
     return {
       id: claims.sub,
       username: claims.email?.split('@')[0] || 'replit_user',
@@ -93,5 +103,6 @@ export const getCurrentUser = (req: Request): CustomUser | null => {
     };
   }
 
+  console.log('No user found');
   return null;
 };

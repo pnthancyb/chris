@@ -141,19 +141,27 @@ export default function Home() {
     };
 
     const handleChatComplete = async (data: any) => {
+      console.log('Chat complete received:', data);
       setIsLoading(false);
+      
+      const finalContent = data.content || streamingMessage;
       setStreamingMessage('');
       setThinkingContent('');
 
-      if (currentConversationId && data.content) {
-        // Save AI response
-        await addMessageMutation.mutateAsync({
-          conversationId: currentConversationId,
-          role: 'assistant',
-          content: data.content,
-          thinking: data.thinking,
-          metadata: { model: data.model },
-        });
+      if (currentConversationId && finalContent) {
+        try {
+          // Save AI response
+          await addMessageMutation.mutateAsync({
+            conversationId: currentConversationId,
+            role: 'assistant',
+            content: finalContent,
+            thinking: data.thinking,
+            metadata: { model: data.model },
+          });
+          console.log('AI message saved successfully');
+        } catch (error) {
+          console.error('Failed to save AI message:', error);
+        }
       }
     };
 

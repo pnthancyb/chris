@@ -1,8 +1,10 @@
 import Groq from "groq-sdk";
 import fs from "fs";
 
+console.log('Environment GROQ_API_KEY:', process.env.GROQ_API_KEY ? 'Set' : 'Not set');
+
 const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY || process.env.GROQ_API_KEY_ENV_VAR || "default_key",
+  apiKey: process.env.GROQ_API_KEY || "missing-api-key",
 });
 
 interface ChatMessage {

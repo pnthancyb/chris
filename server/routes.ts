@@ -153,10 +153,17 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  // Conversations
-  app.get('/api/conversations', isAuthenticated, async (req: any, res) => {
+  // Conversations (support both auth methods)
+  app.get('/api/conversations', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const conversations = await storage.getUserConversations(userId);
       res.json(conversations);
     } catch (error) {
@@ -165,9 +172,16 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.post('/api/conversations', isAuthenticated, async (req: any, res) => {
+  app.post('/api/conversations', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const conversationData = insertConversationSchema.parse({
         ...req.body,
         userId,
@@ -198,8 +212,16 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.patch('/api/conversations/:id', isAuthenticated, async (req: any, res) => {
+  app.patch('/api/conversations/:id', async (req: any, res) => {
     try {
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const conversationId = parseInt(req.params.id);
       const conversation = await storage.updateConversation(conversationId, req.body);
       res.json(conversation);
@@ -209,9 +231,16 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.delete('/api/conversations/:id', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/conversations/:id', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const conversationId = parseInt(req.params.id);
       await storage.deleteConversation(conversationId, userId);
       res.json({ success: true });
@@ -230,18 +259,18 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       }
 
       const conversationId = parseInt(req.params.id);
-      const metadata = req.body.metadata ? {
-        model: typeof req.body.metadata.model === 'string' ? req.body.metadata.model : undefined,
-        tokens: typeof req.body.metadata.tokens === 'number' ? req.body.metadata.tokens : undefined,
-        files: Array.isArray(req.body.metadata.files) ? req.body.metadata.files.filter((f: any) => typeof f === 'string') as string[] : undefined,
-        edited: typeof req.body.metadata.edited === 'boolean' ? req.body.metadata.edited : undefined,
-        regenerated: typeof req.body.metadata.regenerated === 'boolean' ? req.body.metadata.regenerated : undefined,
-      } : null;
-      
       const messageData = insertMessageSchema.parse({
-        ...req.body,
+        role: req.body.role,
+        content: req.body.content,
+        thinking: req.body.thinking || null,
         conversationId,
-        metadata
+        metadata: req.body.metadata ? {
+          model: typeof req.body.metadata.model === 'string' ? req.body.metadata.model : undefined,
+          tokens: typeof req.body.metadata.tokens === 'number' ? req.body.metadata.tokens : undefined,
+          files: Array.isArray(req.body.metadata.files) ? req.body.metadata.files as string[] : undefined,
+          edited: typeof req.body.metadata.edited === 'boolean' ? req.body.metadata.edited : undefined,
+          regenerated: typeof req.body.metadata.regenerated === 'boolean' ? req.body.metadata.regenerated : undefined,
+        } : null
       });
       const message = await storage.createMessage(messageData);
       res.json(message);
@@ -429,10 +458,13 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
             thinkingMode,
           });
 
+          let fullContent = '';
+          
           // Stream response back to client
           if (response.stream) {
             for await (const chunk of response.stream) {
               if (ws.readyState === WebSocket.OPEN) {
+                fullContent += chunk;
                 ws.send(JSON.stringify({
                   type: 'chat-stream',
                   content: chunk,
@@ -440,12 +472,14 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
                 }));
               }
             }
+          } else {
+            fullContent = response.content;
           }
 
           if (ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({
               type: 'chat-complete',
-              content: response.content,
+              content: fullContent,
               thinking: response.thinking,
               model: response.model,
             }));
