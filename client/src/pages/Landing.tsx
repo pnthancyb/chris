@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { AuthModal } from '@/components/Auth/AuthModal';
+import { useLanguage } from '@/hooks/useLanguage';
+import { LanguageSelector } from '@/components/Settings/LanguageSelector';
 import { 
   Brain, 
   Zap, 
@@ -47,10 +51,18 @@ const features = [
 ];
 
 export default function Landing() {
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+    window.location.reload(); // Refresh to show authenticated state
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-blue-900">
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+      <header className="border-b border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
@@ -58,20 +70,31 @@ export default function Landing() {
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">ChrisAI</h1>
-                <p className="text-xs text-slate-500">Advanced AI Assistant</p>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">ChrisAI</h1>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Advanced AI Assistant</p>
               </div>
             </div>
             
-            <Button 
-              onClick={() => window.location.href = '/api/login'}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Get Started
-            </Button>
+            <div className="flex items-center gap-4">
+              <div className="w-48">
+                <LanguageSelector />
+              </div>
+              <Button 
+                onClick={() => setAuthModalOpen(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {t('login')}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
+
+      <AuthModal 
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+      />
 
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32">

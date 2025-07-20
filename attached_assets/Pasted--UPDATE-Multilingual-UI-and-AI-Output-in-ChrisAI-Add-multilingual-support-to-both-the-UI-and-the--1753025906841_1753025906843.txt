@@ -1,0 +1,71 @@
+[UPDATE: Multilingual UI and AI Output in ChrisAI]
+
+Add multilingual support to both the UI and the AI responses. Supported languages:
+
+English (default)
+
+Turkish
+
+Kurdish (Kurmanji)
+
+Spanish
+
+Japanese
+
+Hindi
+
+UI Language:
+Implement a language selector in the Settings tab.
+
+Use a languages.json or i18n system for dynamic label translation (React i18next or custom JSON structure is fine).
+
+On language selection, all UI elements (buttons, labels, tooltips, messages) should dynamically change without page refresh.
+
+AI Response Language:
+Once a language is selected, store the selected language in user settings (local state or DB).
+
+AI chat requests should include a prompt prefix like:
+
+“Please respond only in [SELECTED LANGUAGE], never use another language.”
+
+The AI should strictly respond in the selected language unless reset.[UPDATE: Prompt Engineering UI Tab for ChrisAI]
+
+Add a new tab to ChrisAI called "Prompt Engineering".
+
+Functionality:
+
+Allow the user to input a raw idea or vague prompt.
+
+Let the user optionally select use-case categories (e.g., code, image generation, story writing, technical explanation).
+
+Let them optionally select tone, length, formality, etc.
+
+Use the llama-3.1-8b-instant model (fast + language-optimized) to:
+
+Rewrite their raw input into a detailed, optimized prompt
+
+Show both the raw and rewritten prompts side by side
+
+Allow the user to "Copy Prompt" or "Send to Chat"
+
+(Optional) Display a short explanation of how the AI improved the prompt
+
+This feature should be included as a clean React component with Tailwind styling. Place it under a new tab next to Chat/File Upload.
+
+Focus on UI simplicity, clarity, and responsiveness.
+
+Store this functionality cleanly in the frontend and route via backend only for model inference (no user history required here).The application interface is very nice, but the account section should be at the bottom of the chat history, not above it.
+
+
+In the login and registration section, users should register with their username, email, and password. They will log in with their email/username and password. The option to log in with Replit should remain optional.
+
+
+Rewrite the section where the AI's responses appear. The AI response is coming but not showing up.
+
+Some buttons are not working; please fix them.  
+
+The Settings section is not working; please fix it.  
+
+Please prepare an .md guide explaining the application and database setup.  
+
+In the Settings section, let us personalise the AI by entering a prompt (it will be a system prompt).  

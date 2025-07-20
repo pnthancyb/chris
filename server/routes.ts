@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { registerUser, loginUser, requireAuth, getCurrentUser } from "./auth";
 import { groqService } from "./services/groqService";
 import { fileService } from "./services/fileService";
 import { insertConversationSchema, insertMessageSchema, insertFileSchema } from "@shared/schema";
@@ -21,11 +22,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // Custom Auth routes
+  app.post('/api/auth/register', async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
+      const { username, email, password } = req.body;
+      const user = await registerUser(username, email, password);
+      req.session.user = {
+        id: user.id,
+        username: user.username!,
+        email: user.email!,
+        authProvider: 'custom'
+      };
+      res.json({ success: true, user: { id: user.id, username: user.username, email: user.email } });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { emailOrUsername, password } = req.body;
+      const user = await loginUser(emailOrUsername, password);
+      req.session.user = {
+        id: user.id,
+        username: user.username!,
+        email: user.email!,
+        authProvider: 'custom'
+      };
+      res.json({ success: true, user: { id: user.id, username: user.username, email: user.email } });
+    } catch (error: any) {
+      res.status(401).json({ message: error.message });
+    }
+  });
+
+  app.post('/api/auth/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Could not log out" });
+      }
+      res.json({ success: true });
+    });
+  });
+
+  // User info route (supports both auth methods)
+  app.get('/api/auth/user', async (req: any, res) => {
+    try {
+      const currentUser = getCurrentUser(req);
+      if (!currentUser) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const user = await storage.getUser(currentUser.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
       res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -33,15 +84,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User preferences
-  app.patch('/api/user/preferences', isAuthenticated, async (req: any, res) => {
+  // User preferences (supports both auth methods)
+  app.patch('/api/user/preferences', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.updateUserPreferences(userId, req.body);
+      const currentUser = getCurrentUser(req);
+      if (!currentUser) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const user = await storage.updateUserPreferences(currentUser.id, req.body);
       res.json(user);
     } catch (error) {
-      console.error("Error updating preferences:", error);
+      console.error("Error updating user preferences:", error);
       res.status(500).json({ message: "Failed to update preferences" });
+    }
+  });
+
+  // Prompt engineering route
+  app.post('/api/prompt/optimize', async (req: any, res) => {
+    try {
+      const currentUser = getCurrentUser(req);
+      if (!currentUser) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const { rawPrompt, category, tone, length } = req.body;
+      
+      const optimizePrompt = `You are a prompt engineering expert. Take the following raw prompt and optimize it for better AI responses. Consider the specified category, tone, and length.
+
+Raw prompt: "${rawPrompt}"
+Category: ${category || 'general'}
+Tone: ${tone || 'professional'}  
+Length: ${length || 'medium'}
+
+Return ONLY the optimized prompt, nothing else. Make it clear, specific, and effective for getting the desired AI response.`;
+
+      const response = await groqService.chatCompletion([
+        { role: 'user', content: optimizePrompt }
+      ], 'llama-3.1-8b-instant');
+
+      res.json({ 
+        optimizedPrompt: response.content,
+        explanation: `Optimized for ${category} use case with ${tone} tone and ${length} length.`
+      });
+    } catch (error) {
+      console.error("Error optimizing prompt:", error);
+      res.status(500).json({ message: "Failed to optimize prompt" });
     }
   });
 
@@ -120,6 +208,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const messageData = insertMessageSchema.parse({
         ...req.body,
         conversationId,
+        metadata: req.body.metadata ? {
+          model: typeof req.body.metadata.model === 'string' ? req.body.metadata.model : undefined,
+          tokens: typeof req.body.metadata.tokens === 'number' ? req.body.metadata.tokens : undefined,
+          files: Array.isArray(req.body.metadata.files) ? req.body.metadata.files : undefined,
+          edited: typeof req.body.metadata.edited === 'boolean' ? req.body.metadata.edited : undefined,
+          regenerated: typeof req.body.metadata.regenerated === 'boolean' ? req.body.metadata.regenerated : undefined,
+        } : undefined
       });
       const message = await storage.createMessage(messageData);
       res.json(message);

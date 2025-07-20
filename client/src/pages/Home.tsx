@@ -1,15 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/useLanguage';
 import { isUnauthorizedError } from '@/lib/authUtils';
 import { apiRequest } from '@/lib/queryClient';
+import { getLanguagePromptPrefix } from '@/lib/languages';
 import { ChatSidebar } from '@/components/ChatSidebar';
 import { ChatArea } from '@/components/ChatArea';
 import { ChatInput } from '@/components/ChatInput';
 import { DeveloperPanel } from '@/components/DeveloperPanel';
+import { PromptEngineeringTab } from '@/components/PromptEngineering/PromptEngineeringTab';
+import { LanguageSelector } from '@/components/Settings/LanguageSelector';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Message {
@@ -31,6 +39,7 @@ interface Conversation {
 export default function Home() {
   const { user, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
+  const { t, currentLanguage } = useLanguage();
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
   
@@ -46,6 +55,7 @@ export default function Home() {
   const [streamingMessage, setStreamingMessage] = useState('');
   const [thinkingContent, setThinkingContent] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const [activeTab, setActiveTab] = useState('chat');
 
   // Current conversation data
   const { data: currentConversation } = useQuery({
@@ -424,27 +434,80 @@ export default function Home() {
           </div>
         )}
 
-        <ChatArea
-          messages={messages}
-          isLoading={isLoading}
-          streamingMessage={streamingMessage}
-          thinkingContent={thinkingContent}
-          thinkingMode={thinkingMode}
-          devMode={devMode}
-          onThinkingToggle={() => setThinkingMode(!thinkingMode)}
-          onDevModeToggle={() => setDevMode(!devMode)}
-          onClearChat={handleClearChat}
-          onMessageEdit={handleMessageEdit}
-          onMessageDelete={handleMessageDelete}
-          onMessageRegenerate={handleMessageRegenerate}
-          onMessageSpeak={handleMessageSpeak}
-        />
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+          <div className="border-b border-slate-200 px-4">
+            <TabsList className="grid w-full max-w-md grid-cols-4">
+              <TabsTrigger value="chat">{t('chat')}</TabsTrigger>
+              <TabsTrigger value="prompt">{t('promptEngineering')}</TabsTrigger>
+              <TabsTrigger value="files">{t('files')}</TabsTrigger>
+              <TabsTrigger value="settings">{t('settings')}</TabsTrigger>
+            </TabsList>
+          </div>
 
-        <ChatInput
-          onSendMessage={handleSendMessage}
-          isLoading={isLoading}
-          disabled={!isConnected}
-        />
+          <TabsContent value="chat" className="flex-1 flex flex-col m-0">
+            <ChatArea
+              messages={messages}
+              isLoading={isLoading}
+              streamingMessage={streamingMessage}
+              thinkingContent={thinkingContent}
+              thinkingMode={thinkingMode}
+              devMode={devMode}
+              onThinkingToggle={() => setThinkingMode(!thinkingMode)}
+              onDevModeToggle={() => setDevMode(!devMode)}
+              onClearChat={handleClearChat}
+              onMessageEdit={handleMessageEdit}
+              onMessageDelete={handleMessageDelete}
+              onMessageRegenerate={handleMessageRegenerate}
+              onMessageSpeak={handleMessageSpeak}
+            />
+
+            <ChatInput
+              onSendMessage={handleSendMessage}
+              isLoading={isLoading}
+              disabled={!isConnected}
+            />
+          </TabsContent>
+
+          <TabsContent value="prompt" className="flex-1 m-0">
+            <PromptEngineeringTab 
+              onSendToChat={(prompt: string) => {
+                setActiveTab('chat');
+                // Send optimized prompt to chat
+                handleSendMessage(prompt);
+              }}
+            />
+          </TabsContent>
+
+          <TabsContent value="files" className="flex-1 p-6 m-0">
+            <div className="text-center text-muted-foreground">
+              <p>File upload and management coming soon...</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="settings" className="flex-1 p-6 m-0">
+            <div className="max-w-2xl space-y-6">
+              <h2 className="text-2xl font-bold">{t('settings')}</h2>
+              
+              <div className="space-y-4">
+                <LanguageSelector />
+                
+                <div className="space-y-2">
+                  <Label>{t('systemPrompt')}</Label>
+                  <Textarea
+                    placeholder={t('systemPromptPlaceholder')}
+                    value={user?.preferences?.systemPrompt || ''}
+                    onChange={(e) => {
+                      // Update user preferences
+                      // This would call the API to update preferences
+                    }}
+                    className="min-h-[120px]"
+                  />
+                  <Button className="mt-2">{t('save')}</Button>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Developer Panel */}
