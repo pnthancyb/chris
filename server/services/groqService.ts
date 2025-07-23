@@ -176,11 +176,9 @@ class GroqService {
     try {
       // Using a simple TTS approach - in production you'd want to use OpenAI's TTS API
       // For demo purposes, we'll create a simple audio response indicator
-
-      // Check if espeak is available for basic TTS
-      import { spawn } from 'child_process';
-      import fs from 'fs';
-      import path from 'path';
+      const { spawn } = require('child_process');
+      const fs = require('fs');
+      const path = require('path');
 
       return new Promise((resolve, reject) => {
         const tempFile = `/tmp/tts_${Date.now()}.wav`;

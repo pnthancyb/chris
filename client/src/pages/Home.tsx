@@ -50,7 +50,8 @@ export default function Home() {
   const [currentConversationId, setCurrentConversationId] = useState<number | undefined>();
   const [selectedModel, setSelectedModel] = useState('llama-3.3-70b-versatile');
   const [thinkingMode, setThinkingMode] = useState(false);
-  const [devMode, setDevMode] = useState(false);
+  const [isDeveloperPanelOpen, setIsDeveloperPanelOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [streamingMessage, setStreamingMessage] = useState('');
   const [thinkingContent, setThinkingContent] = useState('');
