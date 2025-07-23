@@ -104,49 +104,18 @@ ${stdout.trim()}`;
         console.log('pdftotext not available');
       }
 
-      // Try Python-based PDF extraction
-      try {
-        const pythonScript = `
-import sys
-import os
-try:
-    import PyPDF2
-    with open(sys.argv[1], 'rb') as file:
-        reader = PyPDF2.PdfReader(file)
-        text = ""
-        for page in reader.pages:
-            text += page.extract_text() + "\\n"
-        print(text.strip())
-except ImportError:
-    try:
-        import pdfplumber
-        with pdfplumber.open(sys.argv[1]) as pdf:
-            text = ""
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\\n"
-            print(text.strip())
-    except ImportError:
-        print("EXTRACTION_FAILED")
-except Exception as e:
-    print(f"ERROR: {str(e)}")
-`;
+      // Enhanced fallback with file metadata
+      const stats = fs.statSync(filePath);
+      const fileName = path.basename(filePath);
 
-        const { stdout: pythonOutput } = await execAsync(`python3 -c "${pythonScript}" "${filePath}"`);
-        if (pythonOutput && pythonOutput.trim() && !pythonOutput.includes('EXTRACTION_FAILED') && !pythonOutput.startsWith('ERROR:')) {
-          const fileName = path.basename(filePath);
-          return `PDF Document: ${fileName}
+      return `PDF Document: ${fileName}
+File Size: ${(stats.size / 1024 / 1024).toFixed(2)} MB
+Created: ${stats.birthtime.toLocaleDateString()}
+Modified: ${stats.mtime.toLocaleDateString()}
 
-Content:
-${pythonOutput.trim()}`;
-        }
-      } catch (pythonError) {
-        console.log('Python PDF extraction failed:', pythonError);
-      }
+This PDF file has been uploaded and is available for processing. The content could not be extracted automatically, but the file can be downloaded and reviewed manually.
 
-      // Basic PDF string extraction as final fallback
-      return await this.basicPDFExtraction(filePath);
+To enable full PDF text extraction, ensure that pdf-parse library is properly installed.`;
     } catch (error) {
       console.error('Error extracting PDF text:', error);
       return `Error processing PDF file: ${path.basename(filePath)} - ${error}`;

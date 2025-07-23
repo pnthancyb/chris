@@ -174,74 +174,83 @@ class GroqService {
 
   async synthesizeSpeech(text: string, voice: string = 'alloy'): Promise<Buffer> {
     try {
+      // Using a simple TTS approach - in production you'd want to use OpenAI's TTS API
+      // For demo purposes, we'll create a simple audio response indicator
       const { spawn } = require('child_process');
       const fs = require('fs');
+      const path = require('path');
 
       return new Promise((resolve, reject) => {
         const tempFile = `/tmp/tts_${Date.now()}.wav`;
 
-        // Try multiple TTS engines
-        const tryEspeak = () => {
-          const espeak = spawn('espeak', ['-w', tempFile, '-s', '150', '-p', '50', text]);
-          
-          espeak.on('close', (code) => {
-            if (code === 0 && fs.existsSync(tempFile)) {
-              const audioBuffer = fs.readFileSync(tempFile);
-              fs.unlinkSync(tempFile);
-              resolve(audioBuffer);
-            } else {
-              tryFallback();
+        // Try to use espeak for basic TTS
+        const espeak = spawn('espeak', ['-w', tempFile, text]);
+
+        espeak.on('close', (code) => {
+          if (code === 0 && fs.existsSync(tempFile)) {
+            const audioBuffer = fs.readFileSync(tempFile);
+            fs.unlinkSync(tempFile); // Clean up
+            resolve(audioBuffer);
+          } else {
+            // Fallback: create a minimal WAV file with silence
+            const sampleRate = 44100;
+            const duration = 2; // 2 seconds
+            const numSamples = sampleRate * duration;
+            const numChannels = 1;
+            const bytesPerSample = 2;
+
+            const buffer = Buffer.alloc(44 + numSamples * bytesPerSample);
+
+            // WAV header
+            buffer.write('RIFF', 0);
+            buffer.writeUInt32LE(36 + numSamples * bytesPerSample, 4);
+            buffer.write('WAVE', 8);
+            buffer.write('fmt ', 12);
+            buffer.writeUInt32LE(16, 16); // PCM format
+            buffer.writeUInt16LE(1, 20); // Audio format
+            buffer.writeUInt16LE(numChannels, 22);
+            buffer.writeUInt32LE(sampleRate, 24);
+            buffer.writeUInt32LE(sampleRate * numChannels * bytesPerSample, 28);
+            buffer.writeUInt16LE(numChannels * bytesPerSample, 32);
+            buffer.writeUInt16LE(bytesPerSample * 8, 34);
+            buffer.write('data', 36);
+            buffer.writeUInt32LE(numSamples * bytesPerSample, 40);
+
+            // Fill with silence (or simple tone)
+            for (let i = 0; i < numSamples; i++) {
+              const amplitude = Math.sin(2 * Math.PI * 440 * i / sampleRate) * 0.1; // 440Hz tone
+              const sample = Math.floor(amplitude * 32767);
+              buffer.writeInt16LE(sample, 44 + i * 2);
             }
-          });
-          
-          espeak.on('error', () => {
-            tryFallback();
-          });
-        };
 
-        const tryFallback = () => {
-          // Create a more sophisticated WAV file with tone patterns
+            resolve(buffer);
+          }
+        });
+
+        espeak.on('error', () => {
+          // espeak not available, create placeholder audio
           const sampleRate = 44100;
-          const duration = Math.min(3, Math.max(1, text.length * 0.1)); // Dynamic duration
-          const numSamples = Math.floor(sampleRate * duration);
-          const numChannels = 1;
-          const bytesPerSample = 2;
+          const duration = 1;
+          const numSamples = sampleRate * duration;
+          const buffer = Buffer.alloc(44 + numSamples * 2);
 
-          const buffer = Buffer.alloc(44 + numSamples * bytesPerSample);
-
-          // WAV header
+          // Simple WAV header for 1 second of silence
           buffer.write('RIFF', 0);
-          buffer.writeUInt32LE(36 + numSamples * bytesPerSample, 4);
+          buffer.writeUInt32LE(36 + numSamples * 2, 4);
           buffer.write('WAVE', 8);
           buffer.write('fmt ', 12);
           buffer.writeUInt32LE(16, 16);
           buffer.writeUInt16LE(1, 20);
-          buffer.writeUInt16LE(numChannels, 22);
+          buffer.writeUInt16LE(1, 22);
           buffer.writeUInt32LE(sampleRate, 24);
-          buffer.writeUInt32LE(sampleRate * numChannels * bytesPerSample, 28);
-          buffer.writeUInt16LE(numChannels * bytesPerSample, 32);
-          buffer.writeUInt16LE(bytesPerSample * 8, 34);
+          buffer.writeUInt32LE(sampleRate * 2, 28);
+          buffer.writeUInt16LE(2, 32);
+          buffer.writeUInt16LE(16, 34);
           buffer.write('data', 36);
-          buffer.writeUInt32LE(numSamples * bytesPerSample, 40);
-
-          // Generate audio based on text characteristics
-          const words = text.split(' ').length;
-          const baseFreq = 300 + (text.length % 200); // Vary frequency based on text
-          
-          for (let i = 0; i < numSamples; i++) {
-            const t = i / sampleRate;
-            const wordPosition = (i / numSamples) * words;
-            const freq = baseFreq + Math.sin(wordPosition * Math.PI) * 100;
-            const amplitude = Math.sin(2 * Math.PI * freq * t) * 0.15 * Math.exp(-t * 2);
-            const sample = Math.floor(amplitude * 32767);
-            buffer.writeInt16LE(sample, 44 + i * 2);
-          }
+          buffer.writeUInt32LE(numSamples * 2, 40);
 
           resolve(buffer);
-        };
-
-        // Start with espeak
-        tryEspeak();
+        });
       });
     } catch (error) {
       console.error('TTS Error:', error);

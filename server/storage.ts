@@ -220,7 +220,7 @@ export class DatabaseStorage implements IStorage {
     if (key) {
       conditions.push(eq(userMemory.key, key));
     }
-
+    
     return db
       .select()
       .from(userMemory)
