@@ -371,6 +371,38 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
+  app.get('/api/files/:id/content', async (req: any, res) => {
+    try {
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const fileId = parseInt(req.params.id);
+      const file = await storage.getFile(fileId, userId);
+
+      if (!file) {
+        return res.status(404).json({ message: "File not found" });
+      }
+
+      // Return processed content if available, otherwise return basic info
+      const content = file.processedContent || `File: ${file.originalName}\nType: ${file.mimeType}\nSize: ${file.size} bytes`;
+      
+      res.json({ 
+        content,
+        filename: file.originalName,
+        mimeType: file.mimeType,
+        processed: !!file.processedContent 
+      });
+    } catch (error) {
+      console.error("Error getting file content:", error);
+      res.status(500).json({ message: "Failed to get file content" });
+    }
+  });
+
   app.delete('/api/files/:id', async (req: any, res) => {
     try {
       const currentUser = getCurrentUser(req);
@@ -467,7 +499,6 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }
-    try {
       const { code, language } = req.body;
 
       if (!code || !language) {

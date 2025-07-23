@@ -1,150 +1,137 @@
-#!/usr/bin/env python3
-"""
-Simple Python code executor for ChrisAI
-Executes Python code in a safe, sandboxed environment
-"""
 
+#!/usr/bin/env python3
 import sys
-import io
-import contextlib
 import json
 import traceback
-import re
-from typing import Dict, Any, List
+import contextlib
+import io
+import ast
+import warnings
+import subprocess
+import os
 
-def safe_eval(expression: str) -> Any:
-    """Safely evaluate simple Python expressions"""
-    allowed_names = {
-        "__builtins__": {
-            "abs", "all", "any", "bin", "bool", "chr", "dict", "divmod",
-            "enumerate", "filter", "float", "hex", "int", "len", "list",
-            "map", "max", "min", "oct", "ord", "pow", "range", "reversed",
-            "round", "set", "sorted", "str", "sum", "tuple", "type", "zip"
-        }
-    }
-    
-    try:
-        return eval(expression, {"__builtins__": allowed_names["__builtins__"]})
-    except Exception as e:
-        raise e
-
-def execute_python_code(code: str) -> Dict[str, Any]:
-    """
-    Execute Python code and return the result
-    Returns: {"success": bool, "output": str, "error": str}
-    """
-    
-    # Capture stdout and stderr
-    old_stdout = sys.stdout
-    old_stderr = sys.stderr
-    
-    captured_output = io.StringIO()
-    captured_error = io.StringIO()
-    
-    result = {
-        "success": True,
-        "output": "",
-        "error": ""
-    }
-    
-    # Handle interactive input() calls by replacing them with mock values
-    if 'input(' in code:
-        # Replace input() calls with predefined values for demo purposes
-        input_replacements = {
-            'İşlem seçin (1/2/3/4): ': '1',
-            'İlk sayı: ': '10',
-            'İkinci sayı: ': '5'
-        }
-        
-        # Create a mock input function
-        def mock_input(prompt=''):
-            for key, value in input_replacements.items():
-                if key in prompt:
-                    print(f"{prompt}{value}")  # Show the prompt and simulated input
-                    return value
-            print(f"{prompt}[Simulated input: test]")
-            return "test"
-        
-        # Replace the built-in input function
-        __builtins__['input'] = mock_input
-    
-    try:
-        # Redirect output
-        sys.stdout = captured_output
-        sys.stderr = captured_error
-        
-        # Create a safe execution environment
-        safe_globals = {
-            "__builtins__": {
-                "print": print,
-                "len": len,
-                "str": str,
-                "int": int,
-                "float": float,
-                "bool": bool,
-                "list": list,
-                "dict": dict,
-                "tuple": tuple,
-                "set": set,
-                "range": range,
-                "sum": sum,
-                "max": max,
-                "min": min,
-                "abs": abs,
-                "round": round,
-                "sorted": sorted,
-                "reversed": reversed,
-                "enumerate": enumerate,
-                "zip": zip,
-                "map": map,
-                "filter": filter,
-                "all": all,
-                "any": any,
+class PythonExecutor:
+    def __init__(self):
+        self.globals_dict = {
+            '__builtins__': {
+                'print': print,
+                'len': len,
+                'range': range,
+                'list': list,
+                'dict': dict,
+                'str': str,
+                'int': int,
+                'float': float,
+                'bool': bool,
+                'sum': sum,
+                'max': max,
+                'min': min,
+                'abs': abs,
+                'round': round,
+                'sorted': sorted,
+                'enumerate': enumerate,
+                'zip': zip,
+                'map': map,
+                'filter': filter,
+                'any': any,
+                'all': all,
+                'type': type,
+                'isinstance': isinstance,
+                'hasattr': hasattr,
+                'getattr': getattr,
+                'setattr': setattr,
+                'dir': dir,
+                'help': help,
             }
         }
-        safe_locals = {}
         
-        # Execute the code
-        exec(code, safe_globals, safe_locals)
+    def is_safe_code(self, code):
+        """Basic safety check for code execution"""
+        dangerous_patterns = [
+            'import os', 'import sys', 'import subprocess', 
+            'import shutil', 'import glob', 'import socket',
+            'exec(', 'eval(', '__import__', 'open(',
+            'file(', 'input(', 'raw_input(', 'compile(',
+            'reload(', 'delattr(', 'dir(', 'vars(',
+            'locals(', 'globals('
+        ]
         
-        # Get the output
-        result["output"] = captured_output.getvalue()
-        
-        # If there's no output from print statements, try to evaluate as expression
-        if not result["output"].strip() and code.strip():
-            try:
-                # Try to evaluate as a single expression
-                lines = code.strip().split('\n')
-                if len(lines) == 1:
-                    expr_result = eval(lines[0], safe_globals, safe_locals)
-                    if expr_result is not None:
-                        result["output"] = str(expr_result)
-            except:
-                pass
-                
-    except Exception as e:
-        result["success"] = False
-        result["error"] = str(e)
-        stderr_content = captured_error.getvalue()
-        if stderr_content:
-            result["error"] += f"\n{stderr_content}"
-            
-    finally:
-        # Restore stdout and stderr
-        sys.stdout = old_stdout
-        sys.stderr = old_stderr
+        code_lower = code.lower()
+        for pattern in dangerous_patterns:
+            if pattern in code_lower:
+                return False
+        return True
     
-    return result
+    def execute_code(self, code):
+        """Execute Python code safely and return output"""
+        if not self.is_safe_code(code):
+            return {
+                'success': False,
+                'output': '',
+                'error': 'Code contains potentially unsafe operations'
+            }
+        
+        # Capture stdout
+        output_buffer = io.StringIO()
+        
+        try:
+            # Parse the code to check for syntax errors
+            ast.parse(code)
+            
+            # Redirect stdout to capture print statements
+            with contextlib.redirect_stdout(output_buffer):
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    
+                    # Execute the code
+                    result = eval(compile(code, '<string>', 'exec'), self.globals_dict)
+                    
+                    # If the last line is an expression, print its result
+                    try:
+                        lines = code.strip().split('\n')
+                        last_line = lines[-1].strip()
+                        if last_line and not last_line.startswith(('print', 'if', 'for', 'while', 'def', 'class', 'import', 'from')):
+                            # Try to evaluate the last line as an expression
+                            last_result = eval(last_line, self.globals_dict)
+                            if last_result is not None:
+                                print(last_result)
+                    except:
+                        pass
+            
+            output = output_buffer.getvalue()
+            
+            return {
+                'success': True,
+                'output': output.strip() if output.strip() else 'Code executed successfully',
+                'error': None
+            }
+            
+        except SyntaxError as e:
+            return {
+                'success': False,
+                'output': '',
+                'error': f'Syntax Error: {str(e)}'
+            }
+        except Exception as e:
+            return {
+                'success': False,
+                'output': output_buffer.getvalue(),
+                'error': f'{type(e).__name__}: {str(e)}'
+            }
 
 def main():
-    """Main function to handle command line execution"""
     if len(sys.argv) != 2:
-        print(json.dumps({"success": False, "error": "No code provided"}))
+        print(json.dumps({
+            'success': False,
+            'output': '',
+            'error': 'No code provided'
+        }))
         return
     
     code = sys.argv[1]
-    result = execute_python_code(code)
+    executor = PythonExecutor()
+    result = executor.execute_code(code)
     print(json.dumps(result))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
