@@ -1,0 +1,385 @@
+client:536 WebSocket connection to 'wss://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/?token=TiHsXhUKYgju' failed: 
+setupWebSocket @ client:536
+(anonymous) @ client:531
+client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=TiHsXhUKYgju' is invalid.
+    at setupWebSocket (client:536:19)
+    at fallback (client:509:16)
+    at WebSocket.<anonymous> (client:555:7)
+setupWebSocket @ client:536
+fallback @ client:509
+(anonymous) @ client:555
+useWebSocket.ts:20 Connecting to WebSocket: wss://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/ws
+useWebSocket.ts:26 WebSocket connected
+content.js:1 Uncaught (in promise) The message port closed before a response was received.
+(anonymous) @ content.js:1
+Home.tsx:243 Sending WebSocket message: {type: 'chat', conversationId: 10, content: 'Merhaba', model: 'llama-3.3-70b-versatile', thinkingMode: false}
+Home.tsx:155 Chat complete received: {type: 'chat-complete', content: 'Merhaba! Size nasıl yardımcı olabilirim?', model: 'llama-3.3-70b-versatile'}
+Home.tsx:172 AI message saved successfully
+Home.tsx:243 Sending WebSocket message: {type: 'chat', conversationId: 10, content: 'Bana basit hesap makinesi python kullanarak', model: 'llama-3.3-70b-versatile', thinkingMode: false}
+Home.tsx:155 Chat complete received: {type: 'chat-complete', content: 'Basit bir hesap makinesiを作mak için aşağıdaki Pytho…cı, iki sayı girmeli ve sonra sonuç görüntülenir.', model: 'llama-3.3-70b-versatile'}
+Home.tsx:172 AI message saved successfully
+Home.tsx:424 Executing code: def topla(x, y):
+ return x + y
+
+def cikar(x, y):
+ return x - y
+
+def carp(x, y):
+ return x * y
+
+def bol(x, y):
+ if y == 0:
+  return "Hata: Bölümde sıfıra bölme hatası!"
+ return x / y
+
+def hesap_makinesi():
+ print("Hesap Makinesi")
+ print("1. Toplama")
+ print("2. Çıkarma")
+ print("3. Çarpma")
+ print("4. Bölme")
+ 
+ secim = input("İşlem seçin (1/2/3/4): ")
+ 
+ if secim == "1":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} + {y} = {topla(x, y)}")
+ elif secim == "2":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} - {y} = {cikar(x, y)}")
+ elif secim == "3":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} * {y} = {carp(x, y)}")
+ elif secim == "4":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} / {y} = {bol(x, y)}")
+ else:
+  print("Geçersiz seçim!")
+
+hesap_makinesi()
+
+Home.tsx:424 Executing code: def topla(x, y):
+ return x + y
+
+def cikar(x, y):
+ return x - y
+
+def carp(x, y):
+ return x * y
+
+def bol(x, y):
+ if y == 0:
+  return "Hata: Bölümde sıfıra bölme hatası!"
+ return x / y
+
+def hesap_makinesi():
+ print("Hesap Makinesi")
+ print("1. Toplama")
+ print("2. Çıkarma")
+ print("3. Çarpma")
+ print("4. Bölme")
+ 
+ secim = input("İşlem seçin (1/2/3/4): ")
+ 
+ if secim == "1":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} + {y} = {topla(x, y)}")
+ elif secim == "2":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} - {y} = {cikar(x, y)}")
+ elif secim == "3":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} * {y} = {carp(x, y)}")
+ elif secim == "4":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} / {y} = {bol(x, y)}")
+ else:
+  print("Geçersiz seçim!")
+
+hesap_makinesi()
+
+Home.tsx:424 Executing code: def topla(x, y):
+ return x + y
+
+def cikar(x, y):
+ return x - y
+
+def carp(x, y):
+ return x * y
+
+def bol(x, y):
+ if y == 0:
+  return "Hata: Bölümde sıfıra bölme hatası!"
+ return x / y
+
+def hesap_makinesi():
+ print("Hesap Makinesi")
+ print("1. Toplama")
+ print("2. Çıkarma")
+ print("3. Çarpma")
+ print("4. Bölme")
+ 
+ secim = input("İşlem seçin (1/2/3/4): ")
+ 
+ if secim == "1":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} + {y} = {topla(x, y)}")
+ elif secim == "2":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} - {y} = {cikar(x, y)}")
+ elif secim == "3":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} * {y} = {carp(x, y)}")
+ elif secim == "4":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} / {y} = {bol(x, y)}")
+ else:
+  print("Geçersiz seçim!")
+
+hesap_makinesi()
+
+Home.tsx:424 Executing code: def topla(x, y):
+ return x + y
+
+def cikar(x, y):
+ return x - y
+
+def carp(x, y):
+ return x * y
+
+def bol(x, y):
+ if y == 0:
+  return "Hata: Bölümde sıfıra bölme hatası!"
+ return x / y
+
+def hesap_makinesi():
+ print("Hesap Makinesi")
+ print("1. Toplama")
+ print("2. Çıkarma")
+ print("3. Çarpma")
+ print("4. Bölme")
+ 
+ secim = input("İşlem seçin (1/2/3/4): ")
+ 
+ if secim == "1":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} + {y} = {topla(x, y)}")
+ elif secim == "2":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} - {y} = {cikar(x, y)}")
+ elif secim == "3":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} * {y} = {carp(x, y)}")
+ elif secim == "4":
+  x = float(input("İlk sayı: "))
+  y = float(input("İkinci sayı: "))
+  print(f"{x} / {y} = {bol(x, y)}")
+ else:
+  print("Geçersiz seçim!")
+
+hesap_makinesi()
+
+about:srcdoc:13 Uncaught SyntaxError: Unexpected identifier 'topla'
+hook.js:608 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. Error Component Stack
+    at DescriptionWarning (@radix-ui_react-dialog.js?v=dbf5b95c:334:29)
+    at @radix-ui_react-dialog.js?v=dbf5b95c:238:13
+    at @radix-ui_react-dialog.js?v=dbf5b95c:161:58
+    at Presence (chunk-S7CBW22B.js?v=dbf5b95c:24:11)
+    at @radix-ui_react-dialog.js?v=dbf5b95c:152:64
+    at chunk-5S42QOQO.js?v=dbf5b95c:79:13
+    at chunk-5S42QOQO.js?v=dbf5b95c:56:13
+    at chunk-GVTGVYSA.js?v=dbf5b95c:42:13
+    at chunk-A765BH7Y.js?v=dbf5b95c:260:22
+    at Presence (chunk-S7CBW22B.js?v=dbf5b95c:24:11)
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at DialogPortal (@radix-ui_react-dialog.js?v=dbf5b95c:114:11)
+    at _c3 (dialog.tsx:33:6)
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at Dialog (@radix-ui_react-dialog.js?v=dbf5b95c:55:5)
+    at FileUpload (FileUpload.tsx:33:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at ChatInput (ChatInput.tsx:30:29)
+    at div (<anonymous>)
+    at chunk-GVTGVYSA.js?v=dbf5b95c:42:13
+    at Presence (chunk-S7CBW22B.js?v=dbf5b95c:24:11)
+    at @radix-ui_react-tabs.js?v=dbf5b95c:389:13
+    at _c5 (tabs.tsx:41:6)
+    at div (<anonymous>)
+    at chunk-GVTGVYSA.js?v=dbf5b95c:42:13
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at @radix-ui_react-tabs.js?v=dbf5b95c:267:7
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at Home (Home.tsx:40:44)
+    at Route (wouter.js?v=dbf5b95c:323:16)
+    at Switch (wouter.js?v=dbf5b95c:379:17)
+    at Router (App.tsx:13:42)
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=dbf5b95c:64:5)
+    at LanguageProvider (LanguageProvider.tsx:7:36)
+    at QueryClientProvider (@tanstack_react-query.js?v=dbf5b95c:2805:3)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+(anonymous) @ @radix-ui_react-dialog.js?v=dbf5b95c:342
+commitHookEffectListMount @ chunk-WERSD76P.js?v=dbf5b95c:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=dbf5b95c:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=dbf5b95c:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=dbf5b95c:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=dbf5b95c:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=dbf5b95c:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=dbf5b95c:19447
+commitRootImpl @ chunk-WERSD76P.js?v=dbf5b95c:19416
+commitRoot @ chunk-WERSD76P.js?v=dbf5b95c:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=dbf5b95c:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=dbf5b95c:9119
+(anonymous) @ chunk-WERSD76P.js?v=dbf5b95c:18627
+FileUpload.tsx:81  POST https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/api/files/upload 401 (Unauthorized)
+uploadFile @ FileUpload.tsx:81
+(anonymous) @ FileUpload.tsx:146
+handleFileInputChange @ FileUpload.tsx:190
+callCallback2 @ chunk-WERSD76P.js?v=dbf5b95c:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=dbf5b95c:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=dbf5b95c:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WERSD76P.js?v=dbf5b95c:3736
+executeDispatch @ chunk-WERSD76P.js?v=dbf5b95c:7014
+processDispatchQueueItemsInOrder @ chunk-WERSD76P.js?v=dbf5b95c:7034
+processDispatchQueue @ chunk-WERSD76P.js?v=dbf5b95c:7043
+dispatchEventsForPlugins @ chunk-WERSD76P.js?v=dbf5b95c:7051
+(anonymous) @ chunk-WERSD76P.js?v=dbf5b95c:7174
+batchedUpdates$1 @ chunk-WERSD76P.js?v=dbf5b95c:18913
+batchedUpdates @ chunk-WERSD76P.js?v=dbf5b95c:3579
+dispatchEventForPluginEventSystem @ chunk-WERSD76P.js?v=dbf5b95c:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WERSD76P.js?v=dbf5b95c:5478
+dispatchEvent @ chunk-WERSD76P.js?v=dbf5b95c:5472
+dispatchDiscreteEvent @ chunk-WERSD76P.js?v=dbf5b95c:5449
+Home.tsx:243 Sending WebSocket message: {type: 'chat', conversationId: 11, content: 'Merhaba', model: 'moonshotai/kimi-k2-instruct', thinkingMode: false}
+Home.tsx:155 Chat complete received: {type: 'chat-complete', content: 'Merhaba! Size nasıl yardımcı olabilirim?', model: 'moonshotai/kimi-k2-instruct'}
+Home.tsx:172 AI message saved successfully
+Home.tsx:393  POST https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/api/voice/synthesize 500 (Internal Server Error)
+(anonymous) @ Home.tsx:393
+onClick @ MessageBubble.tsx:246
+callCallback2 @ chunk-WERSD76P.js?v=dbf5b95c:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=dbf5b95c:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=dbf5b95c:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WERSD76P.js?v=dbf5b95c:3736
+executeDispatch @ chunk-WERSD76P.js?v=dbf5b95c:7014
+processDispatchQueueItemsInOrder @ chunk-WERSD76P.js?v=dbf5b95c:7034
+processDispatchQueue @ chunk-WERSD76P.js?v=dbf5b95c:7043
+dispatchEventsForPlugins @ chunk-WERSD76P.js?v=dbf5b95c:7051
+(anonymous) @ chunk-WERSD76P.js?v=dbf5b95c:7174
+batchedUpdates$1 @ chunk-WERSD76P.js?v=dbf5b95c:18913
+batchedUpdates @ chunk-WERSD76P.js?v=dbf5b95c:3579
+dispatchEventForPluginEventSystem @ chunk-WERSD76P.js?v=dbf5b95c:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WERSD76P.js?v=dbf5b95c:5478
+dispatchEvent @ chunk-WERSD76P.js?v=dbf5b95c:5472
+dispatchDiscreteEvent @ chunk-WERSD76P.js?v=dbf5b95c:5449
+Home.tsx:393  POST https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/api/voice/synthesize 500 (Internal Server Error)
+(anonymous) @ Home.tsx:393
+onClick @ MessageBubble.tsx:246
+callCallback2 @ chunk-WERSD76P.js?v=dbf5b95c:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=dbf5b95c:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=dbf5b95c:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WERSD76P.js?v=dbf5b95c:3736
+executeDispatch @ chunk-WERSD76P.js?v=dbf5b95c:7014
+processDispatchQueueItemsInOrder @ chunk-WERSD76P.js?v=dbf5b95c:7034
+processDispatchQueue @ chunk-WERSD76P.js?v=dbf5b95c:7043
+dispatchEventsForPlugins @ chunk-WERSD76P.js?v=dbf5b95c:7051
+(anonymous) @ chunk-WERSD76P.js?v=dbf5b95c:7174
+batchedUpdates$1 @ chunk-WERSD76P.js?v=dbf5b95c:18913
+batchedUpdates @ chunk-WERSD76P.js?v=dbf5b95c:3579
+dispatchEventForPluginEventSystem @ chunk-WERSD76P.js?v=dbf5b95c:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WERSD76P.js?v=dbf5b95c:5478
+dispatchEvent @ chunk-WERSD76P.js?v=dbf5b95c:5472
+dispatchDiscreteEvent @ chunk-WERSD76P.js?v=dbf5b95c:5449
+hook.js:608 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. Error Component Stack
+    at DescriptionWarning (@radix-ui_react-dialog.js?v=dbf5b95c:334:29)
+    at @radix-ui_react-dialog.js?v=dbf5b95c:238:13
+    at @radix-ui_react-dialog.js?v=dbf5b95c:161:58
+    at Presence (chunk-S7CBW22B.js?v=dbf5b95c:24:11)
+    at @radix-ui_react-dialog.js?v=dbf5b95c:152:64
+    at chunk-5S42QOQO.js?v=dbf5b95c:79:13
+    at chunk-5S42QOQO.js?v=dbf5b95c:56:13
+    at chunk-GVTGVYSA.js?v=dbf5b95c:42:13
+    at chunk-A765BH7Y.js?v=dbf5b95c:260:22
+    at Presence (chunk-S7CBW22B.js?v=dbf5b95c:24:11)
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at DialogPortal (@radix-ui_react-dialog.js?v=dbf5b95c:114:11)
+    at _c3 (dialog.tsx:33:6)
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at Dialog (@radix-ui_react-dialog.js?v=dbf5b95c:55:5)
+    at FileUpload (FileUpload.tsx:33:3)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at ChatInput (ChatInput.tsx:30:29)
+    at div (<anonymous>)
+    at chunk-GVTGVYSA.js?v=dbf5b95c:42:13
+    at Presence (chunk-S7CBW22B.js?v=dbf5b95c:24:11)
+    at @radix-ui_react-tabs.js?v=dbf5b95c:389:13
+    at _c5 (tabs.tsx:41:6)
+    at div (<anonymous>)
+    at chunk-GVTGVYSA.js?v=dbf5b95c:42:13
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at @radix-ui_react-tabs.js?v=dbf5b95c:267:7
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at Home (Home.tsx:40:44)
+    at Route (wouter.js?v=dbf5b95c:323:16)
+    at Switch (wouter.js?v=dbf5b95c:379:17)
+    at Router (App.tsx:13:42)
+    at Provider (chunk-PLT6GTVM.js?v=dbf5b95c:38:15)
+    at TooltipProvider (@radix-ui_react-tooltip.js?v=dbf5b95c:64:5)
+    at LanguageProvider (LanguageProvider.tsx:7:36)
+    at QueryClientProvider (@tanstack_react-query.js?v=dbf5b95c:2805:3)
+    at App (<anonymous>)
+overrideMethod @ hook.js:608
+(anonymous) @ @radix-ui_react-dialog.js?v=dbf5b95c:342
+commitHookEffectListMount @ chunk-WERSD76P.js?v=dbf5b95c:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=dbf5b95c:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=dbf5b95c:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=dbf5b95c:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=dbf5b95c:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=dbf5b95c:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=dbf5b95c:19447
+commitRootImpl @ chunk-WERSD76P.js?v=dbf5b95c:19416
+commitRoot @ chunk-WERSD76P.js?v=dbf5b95c:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=dbf5b95c:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=dbf5b95c:9119
+(anonymous) @ chunk-WERSD76P.js?v=dbf5b95c:18627
+FileUpload.tsx:81  POST https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/api/files/upload 401 (Unauthorized)
+uploadFile @ FileUpload.tsx:81
+(anonymous) @ FileUpload.tsx:146
+handleFileInputChange @ FileUpload.tsx:190
+callCallback2 @ chunk-WERSD76P.js?v=dbf5b95c:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=dbf5b95c:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=dbf5b95c:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WERSD76P.js?v=dbf5b95c:3736
+executeDispatch @ chunk-WERSD76P.js?v=dbf5b95c:7014
+processDispatchQueueItemsInOrder @ chunk-WERSD76P.js?v=dbf5b95c:7034
+processDispatchQueue @ chunk-WERSD76P.js?v=dbf5b95c:7043
+dispatchEventsForPlugins @ chunk-WERSD76P.js?v=dbf5b95c:7051
+(anonymous) @ chunk-WERSD76P.js?v=dbf5b95c:7174
+batchedUpdates$1 @ chunk-WERSD76P.js?v=dbf5b95c:18913
+batchedUpdates @ chunk-WERSD76P.js?v=dbf5b95c:3579
+dispatchEventForPluginEventSystem @ chunk-WERSD76P.js?v=dbf5b95c:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WERSD76P.js?v=dbf5b95c:5478
+dispatchEvent @ chunk-WERSD76P.js?v=dbf5b95c:5472
+dispatchDiscreteEvent @ chunk-WERSD76P.js?v=dbf5b95c:5449
+Home.tsx:243 Sending WebSocket message: {type: 'chat', conversationId: 11, content: 'Bunu özetle', model: 'moonshotai/kimi-k2-instruct', thinkingMode: false}
+Home.tsx:155 Chat complete received: {type: 'chat-complete', content: 'Lütfen özetlememi istediğiniz metni paylaşır mısınız?', model: 'moonshotai/kimi-k2-instruct'}content: "Lütfen özetlememi istediğiniz metni paylaşır mısınız?"model: "moonshotai/kimi-k2-instruct"type: "chat-complete"[[Prototype]]: Object
+Home.tsx:172 AI message saved successfully

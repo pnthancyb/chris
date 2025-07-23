@@ -1,0 +1,447 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+Environment GROQ_API_KEY: Set
+9:06:02 PM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+WebSocket connection established
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: false,
+  hasReqUser: false,
+  sessionId: 'ddlBCDwWlriYkht3iX9fo9nceTMRJIlm'
+}
+No user found
+9:06:07 PM [express] GET /api/auth/user 401 in 5ms :: {"message":"Unauthorized"}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:11 PM [express] GET /api/auth/user 304 in 129ms :: {"id":"custom_1753302608546_3nlmb6nnq","user…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:12 PM [express] GET /api/conversations 304 in 47ms :: [{"id":9,"userId":"custom_1753302608546_3…
+WebSocket connection established
+WebSocket connection closed
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:26 PM [express] GET /api/auth/user 304 in 99ms :: {"id":"custom_1753302608546_3nlmb6nnq","usern…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:33 PM [express] GET /api/conversations 304 in 45ms :: [{"id":9,"userId":"custom_1753302608546_3…
+WebSocket connection established
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:58 PM [express] POST /api/conversations 200 in 214ms :: {"id":10,"userId":"custom_1753302608546…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:58 PM [express] GET /api/conversations 200 in 47ms :: [{"id":10,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:58 PM [express] POST /api/conversations/10/messages 200 in 144ms :: {"id":16,"conversationId":1…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:58 PM [express] GET /api/conversations/10 200 in 169ms :: {"id":10,"userId":"custom_17533026085…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:59 PM [express] POST /api/conversations/10/messages 200 in 52ms :: {"id":17,"conversationId":10…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:06:59 PM [express] GET /api/conversations/10 200 in 70ms :: {"id":10,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:07:22 PM [express] POST /api/conversations/10/messages 200 in 238ms :: {"id":18,"conversationId":1…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:07:22 PM [express] GET /api/conversations/10 200 in 64ms :: {"id":10,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:07:24 PM [express] POST /api/conversations/10/messages 200 in 49ms :: {"id":19,"conversationId":10…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:07:24 PM [express] GET /api/conversations/10 200 in 62ms :: {"id":10,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:00 PM [express] POST /api/conversations 200 in 216ms :: {"id":11,"userId":"custom_1753302608546…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:00 PM [express] GET /api/conversations 200 in 45ms :: [{"id":11,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:00 PM [express] GET /api/conversations/11 200 in 166ms :: {"id":11,"userId":"custom_17533026085…
+9:08:27 PM [express] POST /api/files/upload 401 in 134ms :: {"message":"Unauthorized"}
+9:08:28 PM [express] POST /api/files/upload 401 in 32ms :: {"message":"Unauthorized"}
+9:08:29 PM [express] POST /api/files/upload 401 in 33ms :: {"message":"Unauthorized"}
+9:08:30 PM [express] POST /api/files/upload 401 in 33ms :: {"message":"Unauthorized"}
+9:08:31 PM [express] POST /api/files/upload 401 in 32ms :: {"message":"Unauthorized"}
+9:08:32 PM [express] POST /api/files/upload 401 in 33ms :: {"message":"Unauthorized"}
+9:08:33 PM [express] POST /api/files/upload 401 in 33ms :: {"message":"Unauthorized"}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:42 PM [express] POST /api/conversations/11/messages 200 in 120ms :: {"id":20,"conversationId":1…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:42 PM [express] GET /api/conversations/11 200 in 66ms :: {"id":11,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:43 PM [express] POST /api/conversations/11/messages 200 in 51ms :: {"id":21,"conversationId":11…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:08:43 PM [express] GET /api/conversations/11 200 in 67ms :: {"id":11,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+Error synthesizing speech: BadRequestError: 400 {"error":{"message":"voice must be one of the following voices: [Aaliyah-PlayAI Adelaide-PlayAI Angelo-PlayAI Arista-PlayAI Atlas-PlayAI Basil-PlayAI Briggs-PlayAI Calum-PlayAI Celeste-PlayAI Cheyenne-PlayAI Chip-PlayAI Cillian-PlayAI Deedee-PlayAI Eleanor-PlayAI Fritz-PlayAI Gail-PlayAI Indigo-PlayAI Jennifer-PlayAI Judy-PlayAI Mamaw-PlayAI Mason-PlayAI Mikail-PlayAI Mitch-PlayAI Nia-PlayAI Quinn-PlayAI Ruby-PlayAI Thunder-PlayAI]","type":"invalid_request_error"}}
+    at Function.generate (/home/runner/workspace/node_modules/groq-sdk/src/error.ts:60:14)
+    at Groq.makeStatusError (/home/runner/workspace/node_modules/groq-sdk/src/core.ts:445:21)
+    at Groq.makeRequest (/home/runner/workspace/node_modules/groq-sdk/src/core.ts:511:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async GroqService.synthesizeSpeech (/home/runner/workspace/server/services/groqService.ts:178:24)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:421:27) {
+  status: 400,
+  headers: {
+    'alt-svc': 'h3=":443"; ma=86400',
+    'cache-control': 'private, max-age=0, no-store, no-cache, must-revalidate',
+    'cf-cache-status': 'DYNAMIC',
+    'cf-ray': '963e27a849d075e2-SEA',
+    connection: 'keep-alive',
+    'content-length': '470',
+    'content-type': 'application/json',
+    date: 'Wed, 23 Jul 2025 21:08:45 GMT',
+    server: 'cloudflare',
+    'set-cookie': '__cf_bm=mvqJYFW3MOA6ahwZKCxChVRN.axpCqZWN3d8IvQ0m8I-1753304925-1.0.1.1-SUziZwOhFwmB9A9z4hdvZH4fYZxnGnY7fncrVasEJ0H6DgXgqqQNltDZTSOHcmZWBtrOT_d4PBPJodzGG3CCWinNzv59etex3hiJbOII7JY; path=/; expires=Wed, 23-Jul-25 21:38:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None',
+    vary: 'Origin',
+    via: '1.1 google',
+    'x-groq-region': 'us-west-1',
+    'x-request-id': 'req_01k0whw1a0f4a90r5vgfv64w5s'
+  },
+  error: {
+    error: {
+      message: 'voice must be one of the following voices: [Aaliyah-PlayAI Adelaide-PlayAI Angelo-PlayAI Arista-PlayAI Atlas-PlayAI Basil-PlayAI Briggs-PlayAI Calum-PlayAI Celeste-PlayAI Cheyenne-PlayAI Chip-PlayAI Cillian-PlayAI Deedee-PlayAI Eleanor-PlayAI Fritz-PlayAI Gail-PlayAI Indigo-PlayAI Jennifer-PlayAI Judy-PlayAI Mamaw-PlayAI Mason-PlayAI Mikail-PlayAI Mitch-PlayAI Nia-PlayAI Quinn-PlayAI Ruby-PlayAI Thunder-PlayAI]',
+      type: 'invalid_request_error'
+    }
+  }
+}
+Error synthesizing speech: Error: Failed to synthesize speech
+    at GroqService.synthesizeSpeech (/home/runner/workspace/server/services/groqService.ts:188:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:421:27)
+9:08:45 PM [express] POST /api/voice/synthesize 500 in 103ms :: {"message":"Failed to synthesize spe…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+Error synthesizing speech: BadRequestError: 400 {"error":{"message":"voice must be one of the following voices: [Aaliyah-PlayAI Adelaide-PlayAI Angelo-PlayAI Arista-PlayAI Atlas-PlayAI Basil-PlayAI Briggs-PlayAI Calum-PlayAI Celeste-PlayAI Cheyenne-PlayAI Chip-PlayAI Cillian-PlayAI Deedee-PlayAI Eleanor-PlayAI Fritz-PlayAI Gail-PlayAI Indigo-PlayAI Jennifer-PlayAI Judy-PlayAI Mamaw-PlayAI Mason-PlayAI Mikail-PlayAI Mitch-PlayAI Nia-PlayAI Quinn-PlayAI Ruby-PlayAI Thunder-PlayAI]","type":"invalid_request_error"}}
+    at Function.generate (/home/runner/workspace/node_modules/groq-sdk/src/error.ts:60:14)
+    at Groq.makeStatusError (/home/runner/workspace/node_modules/groq-sdk/src/core.ts:445:21)
+    at Groq.makeRequest (/home/runner/workspace/node_modules/groq-sdk/src/core.ts:511:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async GroqService.synthesizeSpeech (/home/runner/workspace/server/services/groqService.ts:178:24)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:421:27) {
+  status: 400,
+  headers: {
+    'alt-svc': 'h3=":443"; ma=86400',
+    'cache-control': 'private, max-age=0, no-store, no-cache, must-revalidate',
+    'cf-cache-status': 'DYNAMIC',
+    'cf-ray': '963e27cd2c9cba1b-SEA',
+    connection: 'keep-alive',
+    'content-length': '470',
+    'content-type': 'application/json',
+    date: 'Wed, 23 Jul 2025 21:08:51 GMT',
+    server: 'cloudflare',
+    'set-cookie': '__cf_bm=NvaxohhZ1SLA.psBf2Lkm87Phq_ZsE3Osct9XbLQe6E-1753304931-1.0.1.1-d9jO5CPxJIgS6.xzGKDDyDQTZxiDgjL48uuasoknRayXNFuYcobr3U.pKmMoZDiuh9E4LxV0LZHVOEcklhh2_YpRQqvSTHx36ALu21KZJtA; path=/; expires=Wed, 23-Jul-25 21:38:51 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None',
+    vary: 'Origin',
+    via: '1.1 google',
+    'x-groq-region': 'us-west-1',
+    'x-request-id': 'req_01k0whw72jfy8bkv4d0faz08xb'
+  },
+  error: {
+    error: {
+      message: 'voice must be one of the following voices: [Aaliyah-PlayAI Adelaide-PlayAI Angelo-PlayAI Arista-PlayAI Atlas-PlayAI Basil-PlayAI Briggs-PlayAI Calum-PlayAI Celeste-PlayAI Cheyenne-PlayAI Chip-PlayAI Cillian-PlayAI Deedee-PlayAI Eleanor-PlayAI Fritz-PlayAI Gail-PlayAI Indigo-PlayAI Jennifer-PlayAI Judy-PlayAI Mamaw-PlayAI Mason-PlayAI Mikail-PlayAI Mitch-PlayAI Nia-PlayAI Quinn-PlayAI Ruby-PlayAI Thunder-PlayAI]',
+      type: 'invalid_request_error'
+    }
+  }
+}
+Error synthesizing speech: Error: Failed to synthesize speech
+    at GroqService.synthesizeSpeech (/home/runner/workspace/server/services/groqService.ts:188:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:421:27)
+9:08:51 PM [express] POST /api/voice/synthesize 500 in 96ms :: {"message":"Failed to synthesize spee…
+9:09:17 PM [express] POST /api/files/upload 401 in 143ms :: {"message":"Unauthorized"}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:23 PM [express] POST /api/conversations/11/messages 200 in 113ms :: {"id":22,"conversationId":1…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:23 PM [express] GET /api/conversations/11 200 in 64ms :: {"id":11,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:24 PM [express] POST /api/conversations/11/messages 200 in 47ms :: {"id":23,"conversationId":11…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:24 PM [express] GET /api/conversations/11 200 in 63ms :: {"id":11,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:33 PM [express] DELETE /api/conversations/11 200 in 65ms :: {"success":true}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:33 PM [express] POST /api/conversations 200 in 48ms :: {"id":12,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:34 PM [express] GET /api/conversations 200 in 45ms :: [{"id":12,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:34 PM [express] GET /api/conversations 200 in 46ms :: [{"id":12,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:34 PM [express] GET /api/conversations/12 200 in 62ms :: {"id":12,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:35 PM [express] POST /api/conversations 200 in 48ms :: {"id":13,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:36 PM [express] DELETE /api/conversations/12 200 in 170ms :: {"success":true}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:36 PM [express] GET /api/conversations 200 in 51ms :: [{"id":13,"userId":"custom_1753302608546_…
+9:09:36 PM [express] GET /api/conversations/13 200 in 64ms :: {"id":13,"userId":"custom_175330260854…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:36 PM [express] GET /api/conversations 304 in 49ms :: [{"id":13,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:38 PM [express] DELETE /api/conversations/13 200 in 67ms :: {"success":true}
+9:09:38 PM [express] POST /api/conversations 200 in 111ms :: {"id":14,"userId":"custom_1753302608546…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+9:09:38 PM [express] GET /api/conversations 200 in 48ms :: [{"id":14,"userId":"custom_1753302608546_…
+9:09:38 PM [express] GET /api/conversations/14 200 in 61ms :: {"id":14,"userId":"custom_175330260854…
+9:09:38 PM [express] GET /api/conversations 200 in 172ms :: [{"id":14,"userId":"custom_1753302608546…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
