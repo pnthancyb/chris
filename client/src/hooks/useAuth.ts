@@ -1,5 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import type { User } from "@shared/schema";
+
+async function apiRequest(method: string, url: string) {
+  const response = await fetch(url, {
+    method,
+    credentials: 'include',
+  });
+  
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+  
+  return response.json();
+}
 
 export function useAuth() {
   const { data: user, isLoading, error } = useQuery({
@@ -39,6 +52,6 @@ export function useAuth() {
     isLoading,
     error,
     logout: logout.mutate,
-    isLoggedIn: !!user && !error,
+    isAuthenticated: !!user && !error,
   };
 }
