@@ -194,9 +194,16 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.get('/api/conversations/:id', isAuthenticated, async (req: any, res) => {
+  app.get('/api/conversations/:id', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const conversationId = parseInt(req.params.id);
       const conversation = await storage.getConversation(conversationId, userId);
       

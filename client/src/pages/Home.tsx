@@ -57,6 +57,10 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [activeTab, setActiveTab] = useState('chat');
   const [showSettings, setShowSettings] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Local messages state for real-time updates
+  const [messages, setMessages] = useState<Message[]>([]);
 
   // Current conversation data
   const { data: currentConversation } = useQuery<Conversation>({
@@ -65,7 +69,14 @@ export default function Home() {
     retry: false,
   });
 
-  const messages: Message[] = currentConversation?.messages || [];
+  // Sync messages with conversation data
+  useEffect(() => {
+    if (currentConversation?.messages) {
+      setMessages(currentConversation.messages);
+    } else if (!currentConversationId) {
+      setMessages([]);
+    }
+  }, [currentConversation?.messages, currentConversationId]);
 
   // Create new conversation
   const createConversationMutation = useMutation({
@@ -205,7 +216,18 @@ export default function Home() {
 
       if (!conversationId) return;
 
-      // Save user message
+      // Add user message to UI immediately
+      const userMessage: Message = {
+        id: Date.now(),
+        role: 'user',
+        content,
+        metadata: files ? { files: files.map(f => f.name) } : undefined,
+        createdAt: new Date().toISOString(),
+      };
+      
+      setMessages(prev => [...prev, userMessage]);
+
+      // Save user message to database
       await addMessageMutation.mutateAsync({
         conversationId,
         role: 'user',
@@ -217,6 +239,14 @@ export default function Home() {
       setIsLoading(true);
       setStreamingMessage('');
       setThinkingContent('');
+
+      console.log('Sending WebSocket message:', {
+        type: 'chat',
+        conversationId,
+        content,
+        model: selectedModel,
+        thinkingMode,
+      });
 
       sendMessage({
         type: 'chat',
