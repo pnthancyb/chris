@@ -42,10 +42,10 @@ export default function Home() {
   const { t, currentLanguage } = useLanguage();
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
-  
+
   // WebSocket connection
   const { isConnected, sendMessage, onMessage, offMessage } = useWebSocket();
-  
+
   // Local state
   const [currentConversationId, setCurrentConversationId] = useState<number | undefined>();
   const [selectedModel, setSelectedModel] = useState('llama-3.3-70b-versatile');
@@ -154,7 +154,7 @@ export default function Home() {
     const handleChatComplete = async (data: any) => {
       console.log('Chat complete received:', data);
       setIsLoading(false);
-      
+
       const finalContent = data.content || streamingMessage;
       setStreamingMessage('');
       setThinkingContent('');
@@ -224,7 +224,7 @@ export default function Home() {
         metadata: files ? { files: files.map(f => f.name) } : undefined,
         createdAt: new Date().toISOString(),
       };
-      
+
       setMessages(prev => [...prev, userMessage]);
 
       // Save user message to database
@@ -292,11 +292,11 @@ export default function Home() {
     setStreamingMessage('');
     setThinkingContent('');
     setIsLoading(false);
-    
+
     if (isMobile) {
       setSidebarOpen(false);
     }
-    
+
     // Create a new conversation for better UX
     createConversationMutation.mutate(
       { title: 'New Conversation' },
@@ -336,7 +336,7 @@ export default function Home() {
   // Handle message deletion
   const handleMessageDelete = useCallback(async (messageId: number) => {
     if (!confirm('Are you sure you want to delete this message?')) return;
-    
+
     try {
       await deleteMessageMutation.mutateAsync(messageId);
       toast({
@@ -360,13 +360,13 @@ export default function Home() {
     // Find the previous user message
     const messageIndex = messages.findIndex((m: Message) => m.id === messageId);
     const userMessage = messages.slice(0, messageIndex).reverse().find((m: Message) => m.role === 'user');
-    
+
     if (!userMessage) return;
 
     // Delete current message and regenerate
     try {
       await deleteMessageMutation.mutateAsync(messageId);
-      
+
       setIsLoading(true);
       setStreamingMessage('');
       setThinkingContent('');
@@ -589,8 +589,8 @@ export default function Home() {
             </DialogTitle>
           </DialogHeader>
           <SettingsPanel 
-          isOpen={isSettingsOpen} 
-          onClose={() => setIsSettingsOpen(false)} 
+          isOpen={showSettings} 
+          onClose={() => setShowSettings(false)} 
         />
         </DialogContent>
       </Dialog>

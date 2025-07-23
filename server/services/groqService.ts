@@ -174,10 +174,22 @@ class GroqService {
 
   async synthesizeSpeech(text: string, voice: string = 'alloy'): Promise<Buffer> {
     try {
+      // Map standard voice names to PlayAI voice names
+      const voiceMapping: { [key: string]: string } = {
+        'alloy': 'Aaliyah-PlayAI',
+        'echo': 'Angelo-PlayAI', 
+        'fable': 'Eleanor-PlayAI',
+        'onyx': 'Mason-PlayAI',
+        'nova': 'Ruby-PlayAI',
+        'shimmer': 'Celeste-PlayAI'
+      };
+
+      const playAIVoice = voiceMapping[voice] || 'Aaliyah-PlayAI';
+
       // Use Groq's TTS with PlayAI model
       const response = await groq.audio.speech.create({
         model: 'playai-tts',
-        voice: voice,
+        voice: playAIVoice,
         input: text.slice(0, 10000), // Max 10K characters as per API
         response_format: 'wav',
       });

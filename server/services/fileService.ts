@@ -58,12 +58,20 @@ class FileService {
 
   private async extractPDFText(filePath: string): Promise<string> {
     try {
-      // Use pdf-parse or similar library in production
-      // For now, using a simple approach with pdftotext (requires poppler-utils)
-      const { stdout } = await execAsync(`pdftotext "${filePath}" -`);
-      return stdout;
+      // Use pdf-parse library for better PDF text extraction
+      const pdfParse = require('pdf-parse');
+      const dataBuffer = fs.readFileSync(filePath);
+      const data = await pdfParse(dataBuffer);
+      return data.text;
     } catch (error) {
-      throw new Error(`Failed to extract PDF text: ${error.message}`);
+      console.error('PDF parsing failed, trying fallback method:', error);
+      try {
+        // Fallback to pdftotext if available
+        const { stdout } = await execAsync(`pdftotext "${filePath}" -`);
+        return stdout;
+      } catch (fallbackError) {
+        throw new Error(`Failed to extract PDF text: ${error.message}`);
+      }
     }
   }
 

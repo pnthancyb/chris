@@ -318,9 +318,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
   });
 
   // File upload
-  app.post('/api/files/upload', isAuthenticated, upload.single('file'), async (req: any, res) => {
+  app.post('/api/files/upload', upload.single('file'), async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
       const file = req.file;
 
       if (!file) {
@@ -348,9 +354,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.get('/api/files', isAuthenticated, async (req: any, res) => {
+  app.get('/api/files', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
       const files = await storage.getUserFiles(userId);
       res.json(files);
     } catch (error) {
@@ -359,9 +371,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.delete('/api/files/:id', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/files/:id', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
       const fileId = parseInt(req.params.id);
       
       const file = await storage.getFile(fileId, userId);
@@ -383,8 +401,16 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
   });
 
   // Voice transcription
-  app.post('/api/voice/transcribe', isAuthenticated, upload.single('audio'), async (req: any, res) => {
+  app.post('/api/voice/transcribe', upload.single('audio'), async (req: any, res) => {
     try {
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const audioFile = req.file;
       if (!audioFile) {
         return res.status(400).json({ message: "No audio file provided" });
@@ -432,7 +458,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
   });
 
   // Code execution endpoint
-  app.post('/api/code/execute', requireAuth, async (req, res) => {
+  app.post('/api/code/execute', async (req, res) => {
+    try {
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
     try {
       const { code, language } = req.body;
       

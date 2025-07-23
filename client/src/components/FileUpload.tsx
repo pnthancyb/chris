@@ -200,6 +200,9 @@ export function FileUpload({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Upload Files</DialogTitle>
+          <p className="text-sm text-slate-600">
+            Upload files to process and analyze with the AI assistant
+          </p>
         </DialogHeader>
 
         <div className="space-y-4">

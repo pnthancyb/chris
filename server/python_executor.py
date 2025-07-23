@@ -47,6 +47,27 @@ def execute_python_code(code: str) -> Dict[str, Any]:
         "error": ""
     }
     
+    # Handle interactive input() calls by replacing them with mock values
+    if 'input(' in code:
+        # Replace input() calls with predefined values for demo purposes
+        input_replacements = {
+            'İşlem seçin (1/2/3/4): ': '1',
+            'İlk sayı: ': '10',
+            'İkinci sayı: ': '5'
+        }
+        
+        # Create a mock input function
+        def mock_input(prompt=''):
+            for key, value in input_replacements.items():
+                if key in prompt:
+                    print(f"{prompt}{value}")  # Show the prompt and simulated input
+                    return value
+            print(f"{prompt}[Simulated input: test]")
+            return "test"
+        
+        # Replace the built-in input function
+        __builtins__['input'] = mock_input
+    
     try:
         # Redirect output
         sys.stdout = captured_output
