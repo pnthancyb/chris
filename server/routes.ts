@@ -390,7 +390,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
 
       // Return processed content if available, otherwise return basic info
       const content = file.processedContent || `File: ${file.originalName}\nType: ${file.mimeType}\nSize: ${file.size} bytes`;
-      
+
       res.json({ 
         content,
         filename: file.originalName,
@@ -611,6 +611,13 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
         output,
         language,
         executionTime: Math.floor(Math.random() * 1000) + 100,
+      });
+    } catch (error) {
+      console.error('Code execution error:', error);
+      res.status(500).json({ 
+        success: false,
+        error: 'Failed to execute code',
+        output: '',
       });
     } catch (error) {
       console.error('Code execution error:', error);

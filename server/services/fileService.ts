@@ -94,33 +94,77 @@ class FileService {
 
   private async extractPDFTextFallback(filePath: string): Promise<string> {
     try {
+      // Try using Python script for PDF extraction
+      try {
+        const { spawn } = require('child_process');
+        const pythonScript = `
+import sys
+try:
+    import PyPDF2
+    with open('${filePath}', 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\\n"
+        print(text.strip())
+except ImportError:
+    try:
+        import pdfplumber
+        with pdfplumber.open('${filePath}') as pdf:
+            text = ""
+            for page in pdf.pages:
+                text += page.extract_text() or "" + "\\n"
+            print(text.strip())
+    except ImportError:
+        print("PDF_EXTRACTION_FAILED")
+except Exception as e:
+    print(f"ERROR: {str(e)}")
+`;
+        
+        return new Promise((resolve) => {
+          const python = spawn('python3', ['-c', pythonScript]);
+          let output = '';
+          let error = '';
+
+          python.stdout.on('data', (data) => {
+            output += data.toString();
+          });
+
+          python.stderr.on('data', (data) => {
+            error += data.toString();
+          });
+
+          python.on('close', () => {
+            if (output.trim() && !output.includes('PDF_EXTRACTION_FAILED') && !output.startsWith('ERROR:')) {
+              resolve(output.trim());
+            } else {
+              resolve(this.basicPDFExtraction(filePath));
+            }
+          });
+        });
+      } catch (pythonError) {
+        return this.basicPDFExtraction(filePath);
+      }
+    } catch (error) {
+      console.error('PDF extraction error:', error);
+      return 'Error extracting PDF content. Please ensure the file is a valid PDF.';
+    }
+  }
+
+  private basicPDFExtraction(filePath: string): string {
+    try {
       const fileBuffer = fs.readFileSync(filePath);
-
-      // Basic PDF text extraction - look for text objects
       const pdfString = fileBuffer.toString('latin1');
-      const textRegex = /BT\s*(.*?)\s*ET/gs;
+      
+      // Look for text patterns in PDF
+      const textRegex = /\((.*?)\)\s*Tj/g;
       const texts: string[] = [];
-
       let match;
+      
       while ((match = textRegex.exec(pdfString)) !== null) {
-        const textCommands = match[1];
-        // Extract text from Tj commands
-        const tjRegex = /\((.*?)\)\s*Tj/g;
-        let tjMatch;
-        while ((tjMatch = tjRegex.exec(textCommands)) !== null) {
-          texts.push(tjMatch[1]);
-        }
-
-        // Extract text from TJ commands (arrays)
-        const TJRegex = /\[(.*?)\]\s*TJ/g;
-        let TJMatch;
-        while ((TJMatch = TJRegex.exec(textCommands)) !== null) {
-          const arrayContent = TJMatch[1];
-          const stringRegex = /\((.*?)\)/g;
-          let stringMatch;
-          while ((stringMatch = stringRegex.exec(arrayContent)) !== null) {
-            texts.push(stringMatch[1]);
-          }
+        const text = match[1].replace(/\\[0-9]{3}/g, ' ').trim();
+        if (text && text.length > 1) {
+          texts.push(text);
         }
       }
 
@@ -130,7 +174,6 @@ class FileService {
 
       return texts.join(' ').replace(/\s+/g, ' ').trim();
     } catch (error) {
-      console.error('PDF extraction error:', error);
       return 'Error extracting PDF content. Please ensure the file is a valid PDF.';
     }
   }

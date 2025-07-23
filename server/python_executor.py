@@ -53,13 +53,20 @@ class PythonExecutor:
             'exec(', 'eval(', '__import__', 'open(',
             'file(', 'input(', 'raw_input(', 'compile(',
             'reload(', 'delattr(', 'dir(', 'vars(',
-            'locals(', 'globals('
+            'locals(', 'globals(', '__builtins__'
         ]
         
         code_lower = code.lower()
         for pattern in dangerous_patterns:
             if pattern in code_lower:
                 return False
+        
+        # Additional checks for file operations and network
+        forbidden_keywords = ['file', 'socket', 'urllib', 'requests', 'http']
+        for keyword in forbidden_keywords:
+            if keyword in code_lower and ('import' in code_lower or 'from' in code_lower):
+                return False
+                
         return True
     
     def execute_code(self, code):
