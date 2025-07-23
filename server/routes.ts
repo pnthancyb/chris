@@ -448,10 +448,45 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
         return res.status(400).json({ message: "No audio file provided" });
       }
 
-      const transcription = await groqService.transcribeAudio(audioFile.path);
+      // Check if file extension is supported by Groq
+      const supportedFormats = ['flac', 'mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'ogg', 'opus', 'wav', 'webm'];
+      const fileExtension = path.extname(audioFile.originalname).slice(1).toLowerCase();
+      
+      let processedPath = audioFile.path;
+      
+      if (!supportedFormats.includes(fileExtension)) {
+        // Try to convert using ffmpeg if available
+        try {
+          const { spawn } = require('child_process');
+          const convertedPath = audioFile.path + '.wav';
+          
+          await new Promise((resolve, reject) => {
+            const ffmpeg = spawn('ffmpeg', ['-i', audioFile.path, '-acodec', 'pcm_s16le', '-ar', '16000', convertedPath]);
+            ffmpeg.on('close', (code) => {
+              if (code === 0) {
+                processedPath = convertedPath;
+                resolve(code);
+              } else {
+                reject(new Error(`ffmpeg conversion failed with code ${code}`));
+              }
+            });
+            ffmpeg.on('error', reject);
+          });
+        } catch (conversionError) {
+          console.warn('Audio conversion failed:', conversionError);
+          return res.status(400).json({ 
+            message: `Unsupported audio format: ${fileExtension}. Supported formats: ${supportedFormats.join(', ')}`
+          });
+        }
+      }
 
-      // Clean up temp file
+      const transcription = await groqService.transcribeAudio(processedPath);
+
+      // Clean up temp files
       fs.unlinkSync(audioFile.path);
+      if (processedPath !== audioFile.path && fs.existsSync(processedPath)) {
+        fs.unlinkSync(processedPath);
+      }
 
       res.json({ text: transcription });
     } catch (error) {

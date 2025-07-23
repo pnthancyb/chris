@@ -50,7 +50,7 @@ export function MessageBubble({
   const [editContent, setEditContent] = useState(message.content);
   const [copiedStates, setCopiedStates] = useState<{ [key: string]: boolean }>({});
   const [collapsedBlocks, setCollapsedBlocks] = useState<{ [key: number]: boolean }>({});
-  
+
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleEdit = () => {

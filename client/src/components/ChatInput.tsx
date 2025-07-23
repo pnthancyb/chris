@@ -32,17 +32,17 @@ export function ChatInput({ onSendMessage, isLoading, disabled }: ChatInputProps
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [showFormatToolbar, setShowFormatToolbar] = useState(false);
-  
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { isRecording, isProcessing, recordAndTranscribe } = useAudioRecording();
 
   const handleSubmit = useCallback(() => {
     if ((!message.trim() && attachedFiles.length === 0) || isLoading || disabled) return;
-    
+
     onSendMessage(message.trim(), attachedFiles.map(af => af.file));
     setMessage('');
     setAttachedFiles([]);
-    
+
     // Reset textarea height
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -58,7 +58,7 @@ export function ChatInput({ onSendMessage, isLoading, disabled }: ChatInputProps
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-    
+
     // Auto-resize textarea
     const textarea = e.target;
     textarea.style.height = 'auto';

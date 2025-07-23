@@ -19,6 +19,8 @@ class PythonExecutor:
                 'range': range,
                 'list': list,
                 'dict': dict,
+                'set': set,
+                'tuple': tuple,
                 'str': str,
                 'int': int,
                 'float': float,
@@ -42,7 +44,19 @@ class PythonExecutor:
                 'setattr': setattr,
                 'dir': dir,
                 'help': help,
-            }
+                'chr': chr,
+                'ord': ord,
+                'bin': bin,
+                'hex': hex,
+                'oct': oct,
+                'pow': pow,
+                'divmod': divmod,
+                'slice': slice,
+            },
+            'math': __import__('math'),
+            'random': __import__('random'),
+            'datetime': __import__('datetime'),
+            'json': __import__('json'),
         }
         
     def is_safe_code(self, code):

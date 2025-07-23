@@ -1,11 +1,22 @@
-import fs from "fs";
-import path from "path";
+# Analyze the code changes and generate the modified code file.
+# The goal is to enhance PDF processing capabilities by adding pdf-parse library and improving the extractPdfText function.
+
+import fs from 'fs';
+import path from 'path';
 import { promisify } from "util";
 import { exec } from "child_process";
 import { storage } from "../storage";
 import { groqService } from "./groqService";
 import type { File } from "@shared/schema";
 import { spawn } from 'child_process';
+
+// Import pdf-parse if available
+let pdfParse: any = null;
+try {
+  pdfParse = require('pdf-parse');
+} catch (error) {
+  console.log('pdf-parse not available, using fallback PDF processing');
+}
 
 const execAsync = promisify(exec);
 
@@ -58,38 +69,63 @@ class FileService {
   }
 
   private async extractPDFText(filePath: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      // Try using pdftotext if available
-      const pdftotext = spawn('pdftotext', [filePath, '-']);
-      let output = '';
-      let error = '';
+    try {
+      // Try using pdf-parse library first
+      if (pdfParse) {
+        try {
+          const dataBuffer = fs.readFileSync(filePath);
+          const data = await pdfParse(dataBuffer);
 
-      pdftotext.stdout.on('data', (data) => {
-        output += data.toString();
-      });
+          if (data.text && data.text.trim()) {
+            const fileName = path.basename(filePath);
+            const stats = fs.statSync(filePath);
 
-      pdftotext.stderr.on('data', (data) => {
-        error += data.toString();
-      });
+            return `PDF Document: ${fileName}
+Pages: ${data.numpages}
+File Size: ${(stats.size / 1024 / 1024).toFixed(2)} MB
 
-      pdftotext.on('close', (code) => {
-        if (code === 0 && output.trim()) {
-          resolve(output);
-        } else {
-          // Fallback to basic PDF parsing
-          this.extractPDFTextFallback(filePath)
-            .then(resolve)
-            .catch(reject);
+Content:
+${data.text.trim()}`;
+          }
+        } catch (parseError) {
+          console.error('pdf-parse extraction failed:', parseError);
         }
-      });
+      }
 
-      pdftotext.on('error', () => {
-        // pdftotext not available, use fallback
-        this.extractPDFTextFallback(filePath)
-          .then(resolve)
-          .catch(reject);
-      });
-    });
+      // Try using pdftotext (part of poppler-utils) as fallback
+      try {
+        const { exec } = require('child_process');
+        const util = require('util');
+        const execAsync = util.promisify(exec);
+
+        const { stdout } = await execAsync(`pdftotext "${filePath}" -`);
+        if (stdout && stdout.trim()) {
+          const fileName = path.basename(filePath);
+          return `PDF Document: ${fileName}
+
+Content:
+${stdout.trim()}`;
+        }
+      } catch (pdfError) {
+        console.log('pdftotext not available');
+      }
+
+      // Enhanced fallback with file metadata
+      const stats = fs.statSync(filePath);
+      const fileName = path.basename(filePath);
+
+      return `PDF Document: ${fileName}
+File Size: ${(stats.size / 1024 / 1024).toFixed(2)} MB
+Created: ${stats.birthtime.toLocaleDateString()}
+Modified: ${stats.mtime.toLocaleDateString()}
+
+This PDF file has been uploaded and is available for processing. The content could not be extracted automatically, but the file can be downloaded and reviewed manually.
+
+To enable full PDF text extraction, ensure that pdf-parse library is properly installed.`;
+    } catch (error) {
+      console.error('Error extracting PDF text:', error);
+      return `Error processing PDF file: ${path.basename(filePath)} - ${error}`;
+    }
   }
 
   private async extractPDFTextFallback(filePath: string): Promise<string> {
@@ -120,7 +156,7 @@ except ImportError:
 except Exception as e:
     print(f"ERROR: {str(e)}")
 `;
-        
+
         return new Promise((resolve) => {
           const python = spawn('python3', ['-c', pythonScript]);
           let output = '';
@@ -155,12 +191,12 @@ except Exception as e:
     try {
       const fileBuffer = fs.readFileSync(filePath);
       const pdfString = fileBuffer.toString('latin1');
-      
+
       // Look for text patterns in PDF
       const textRegex = /\((.*?)\)\s*Tj/g;
       const texts: string[] = [];
       let match;
-      
+
       while ((match = textRegex.exec(pdfString)) !== null) {
         const text = match[1].replace(/\\[0-9]{3}/g, ' ').trim();
         if (text && text.length > 1) {
