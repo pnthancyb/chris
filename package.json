@@ -45,6 +45,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/memoizee": "^0.4.12",
     "@types/multer": "^2.0.0",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react-syntax-highlighter": "^15.5.13",
     "bcrypt": "^6.0.0",
     "child_process": "^1.0.2",
