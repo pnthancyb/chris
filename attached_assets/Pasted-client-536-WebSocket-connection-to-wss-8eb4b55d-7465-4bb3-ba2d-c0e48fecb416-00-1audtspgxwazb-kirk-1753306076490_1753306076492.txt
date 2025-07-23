@@ -1,0 +1,117 @@
+client:536 WebSocket connection to 'wss://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/?token=M1TeFzT5ePrZ' failed: 
+setupWebSocket @ client:536
+(anonymous) @ client:531
+client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=M1TeFzT5ePrZ' is invalid.
+    at setupWebSocket (client:536:19)
+    at fallback (client:509:16)
+    at WebSocket.<anonymous> (client:555:7)
+setupWebSocket @ client:536
+fallback @ client:509
+(anonymous) @ client:555
+useAuth.ts:18 Uncaught ReferenceError: useMutation is not defined
+    at useAuth (useAuth.ts:18:18)
+    at Router (App.tsx:13:42)
+    at renderWithHooks (chunk-WERSD76P.js?v=9b4a1f5e:11548:26)
+    at mountIndeterminateComponent (chunk-WERSD76P.js?v=9b4a1f5e:14926:21)
+    at beginWork (chunk-WERSD76P.js?v=9b4a1f5e:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-WERSD76P.js?v=9b4a1f5e:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-WERSD76P.js?v=9b4a1f5e:3699:24)
+    at invokeGuardedCallback (chunk-WERSD76P.js?v=9b4a1f5e:3733:39)
+    at beginWork$1 (chunk-WERSD76P.js?v=9b4a1f5e:19765:15)
+    at performUnitOfWork (chunk-WERSD76P.js?v=9b4a1f5e:19198:20)
+useAuth @ useAuth.ts:18
+Router @ App.tsx:13
+renderWithHooks @ chunk-WERSD76P.js?v=9b4a1f5e:11548
+mountIndeterminateComponent @ chunk-WERSD76P.js?v=9b4a1f5e:14926
+beginWork @ chunk-WERSD76P.js?v=9b4a1f5e:15914
+callCallback2 @ chunk-WERSD76P.js?v=9b4a1f5e:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=9b4a1f5e:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=9b4a1f5e:3733
+beginWork$1 @ chunk-WERSD76P.js?v=9b4a1f5e:19765
+performUnitOfWork @ chunk-WERSD76P.js?v=9b4a1f5e:19198
+workLoopSync @ chunk-WERSD76P.js?v=9b4a1f5e:19137
+renderRootSync @ chunk-WERSD76P.js?v=9b4a1f5e:19116
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=9b4a1f5e:18678
+workLoop @ chunk-WERSD76P.js?v=9b4a1f5e:197
+flushWork @ chunk-WERSD76P.js?v=9b4a1f5e:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=9b4a1f5e:384
+useAuth.ts:18 Uncaught ReferenceError: useMutation is not defined
+    at useAuth (useAuth.ts:18:18)
+    at Router (App.tsx:13:42)
+    at renderWithHooks (chunk-WERSD76P.js?v=9b4a1f5e:11548:26)
+    at mountIndeterminateComponent (chunk-WERSD76P.js?v=9b4a1f5e:14926:21)
+    at beginWork (chunk-WERSD76P.js?v=9b4a1f5e:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-WERSD76P.js?v=9b4a1f5e:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-WERSD76P.js?v=9b4a1f5e:3699:24)
+    at invokeGuardedCallback (chunk-WERSD76P.js?v=9b4a1f5e:3733:39)
+    at beginWork$1 (chunk-WERSD76P.js?v=9b4a1f5e:19765:15)
+    at performUnitOfWork (chunk-WERSD76P.js?v=9b4a1f5e:19198:20)
+useAuth @ useAuth.ts:18
+Router @ App.tsx:13
+renderWithHooks @ chunk-WERSD76P.js?v=9b4a1f5e:11548
+mountIndeterminateComponent @ chunk-WERSD76P.js?v=9b4a1f5e:14926
+beginWork @ chunk-WERSD76P.js?v=9b4a1f5e:15914
+callCallback2 @ chunk-WERSD76P.js?v=9b4a1f5e:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=9b4a1f5e:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=9b4a1f5e:3733
+beginWork$1 @ chunk-WERSD76P.js?v=9b4a1f5e:19765
+performUnitOfWork @ chunk-WERSD76P.js?v=9b4a1f5e:19198
+workLoopSync @ chunk-WERSD76P.js?v=9b4a1f5e:19137
+renderRootSync @ chunk-WERSD76P.js?v=9b4a1f5e:19116
+recoverFromConcurrentError @ chunk-WERSD76P.js?v=9b4a1f5e:18736
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=9b4a1f5e:18684
+workLoop @ chunk-WERSD76P.js?v=9b4a1f5e:197
+flushWork @ chunk-WERSD76P.js?v=9b4a1f5e:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=9b4a1f5e:384
+hook.js:608 The above error occurred in the <Router> component:
+
+    at Router (https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/src/App.tsx?v=5j0k9IVVCtChdFtoi5Xa1:30:42)
+    at Provider (https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-PLT6GTVM.js?v=9b4a1f5e:38:15)
+    at TooltipProvider (https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=9b4a1f5e:64:5)
+    at LanguageProvider (https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/src/components/LanguageProvider.tsx:19:36)
+    at QueryClientProvider (https://8eb4b55d-7465-4bb3-ba2d-c0e48fecb416-00-1audtspgxwazb.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=9b4a1f5e:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+overrideMethod @ hook.js:608
+logCapturedError @ chunk-WERSD76P.js?v=9b4a1f5e:14032
+update.callback @ chunk-WERSD76P.js?v=9b4a1f5e:14052
+callCallback @ chunk-WERSD76P.js?v=9b4a1f5e:11248
+commitUpdateQueue @ chunk-WERSD76P.js?v=9b4a1f5e:11265
+commitLayoutEffectOnFiber @ chunk-WERSD76P.js?v=9b4a1f5e:17093
+commitLayoutMountEffects_complete @ chunk-WERSD76P.js?v=9b4a1f5e:17980
+commitLayoutEffects_begin @ chunk-WERSD76P.js?v=9b4a1f5e:17969
+commitLayoutEffects @ chunk-WERSD76P.js?v=9b4a1f5e:17920
+commitRootImpl @ chunk-WERSD76P.js?v=9b4a1f5e:19353
+commitRoot @ chunk-WERSD76P.js?v=9b4a1f5e:19277
+finishConcurrentRender @ chunk-WERSD76P.js?v=9b4a1f5e:18760
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=9b4a1f5e:18718
+workLoop @ chunk-WERSD76P.js?v=9b4a1f5e:197
+flushWork @ chunk-WERSD76P.js?v=9b4a1f5e:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=9b4a1f5e:384
+chunk-WERSD76P.js?v=9b4a1f5e:19413 Uncaught ReferenceError: useMutation is not defined
+    at useAuth (useAuth.ts:18:18)
+    at Router (App.tsx:13:42)
+    at renderWithHooks (chunk-WERSD76P.js?v=9b4a1f5e:11548:26)
+    at mountIndeterminateComponent (chunk-WERSD76P.js?v=9b4a1f5e:14926:21)
+    at beginWork (chunk-WERSD76P.js?v=9b4a1f5e:15914:22)
+    at beginWork$1 (chunk-WERSD76P.js?v=9b4a1f5e:19753:22)
+    at performUnitOfWork (chunk-WERSD76P.js?v=9b4a1f5e:19198:20)
+    at workLoopSync (chunk-WERSD76P.js?v=9b4a1f5e:19137:13)
+    at renderRootSync (chunk-WERSD76P.js?v=9b4a1f5e:19116:15)
+    at recoverFromConcurrentError (chunk-WERSD76P.js?v=9b4a1f5e:18736:28)
+useAuth @ useAuth.ts:18
+Router @ App.tsx:13
+renderWithHooks @ chunk-WERSD76P.js?v=9b4a1f5e:11548
+mountIndeterminateComponent @ chunk-WERSD76P.js?v=9b4a1f5e:14926
+beginWork @ chunk-WERSD76P.js?v=9b4a1f5e:15914
+beginWork$1 @ chunk-WERSD76P.js?v=9b4a1f5e:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=9b4a1f5e:19198
+workLoopSync @ chunk-WERSD76P.js?v=9b4a1f5e:19137
+renderRootSync @ chunk-WERSD76P.js?v=9b4a1f5e:19116
+recoverFromConcurrentError @ chunk-WERSD76P.js?v=9b4a1f5e:18736
+performConcurrentWorkOnRoot @ chunk-WERSD76P.js?v=9b4a1f5e:18684
+workLoop @ chunk-WERSD76P.js?v=9b4a1f5e:197
+flushWork @ chunk-WERSD76P.js?v=9b4a1f5e:176
+performWorkUntilDeadline @ chunk-WERSD76P.js?v=9b4a1f5e:384
