@@ -1,0 +1,224 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+Environment GROQ_API_KEY: Set
+8:52:39 PM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+WebSocket connection established
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: false,
+  hasReqUser: false,
+  sessionId: 'oVngJv71CBcktg_y42zZFboS2imkzyd7'
+}
+No user found
+8:52:44 PM [express] GET /api/auth/user 401 in 5ms :: {"message":"Unauthorized"}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:52:47 PM [express] GET /api/auth/user 304 in 123ms :: {"id":"custom_1753302608546_3nlmb6nnq","user…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:52:48 PM [express] GET /api/conversations 200 in 48ms :: [{"id":7,"userId":"custom_1753302608546_3…
+WebSocket connection closed
+WebSocket connection established
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:52:55 PM [express] GET /api/auth/user 304 in 49ms :: {"id":"custom_1753302608546_3nlmb6nnq","usern…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:00 PM [express] GET /api/conversations 304 in 54ms :: [{"id":7,"userId":"custom_1753302608546_3…
+WebSocket connection established
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:36 PM [express] POST /api/conversations 200 in 206ms :: {"id":8,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:36 PM [express] GET /api/conversations 200 in 45ms :: [{"id":8,"userId":"custom_1753302608546_3…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:36 PM [express] POST /api/conversations/8/messages 200 in 155ms :: {"id":8,"conversationId":8,"…
+8:53:36 PM [express] GET /api/conversations/8 200 in 196ms :: {"id":8,"userId":"custom_1753302608546…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:37 PM [express] POST /api/conversations/8/messages 200 in 49ms :: {"id":9,"conversationId":8,"r…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:37 PM [express] GET /api/conversations/8 200 in 61ms :: {"id":8,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:45 PM [express] POST /api/conversations/8/messages 200 in 46ms :: {"id":10,"conversationId":8,"…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:46 PM [express] GET /api/conversations/8 200 in 59ms :: {"id":8,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:46 PM [express] POST /api/conversations/8/messages 200 in 47ms :: {"id":11,"conversationId":8,"…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:53:46 PM [express] GET /api/conversations/8 200 in 59ms :: {"id":8,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:54:12 PM [express] POST /api/conversations/8/messages 200 in 251ms :: {"id":12,"conversationId":8,…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:54:12 PM [express] GET /api/conversations/8 200 in 68ms :: {"id":8,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:54:15 PM [express] POST /api/conversations/8/messages 200 in 50ms :: {"id":13,"conversationId":8,"…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:54:15 PM [express] GET /api/conversations/8 200 in 70ms :: {"id":8,"userId":"custom_1753302608546_…
+8:54:43 PM [express] POST /api/voice/synthesize 401 in 134ms :: {"message":"Unauthorized"}
+8:55:06 PM [express] POST /api/voice/synthesize 401 in 118ms :: {"message":"Unauthorized"}
+8:55:10 PM [express] DELETE /api/messages/13 401 in 29ms :: {"message":"Unauthorized"}
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:55:36 PM [express] POST /api/conversations 200 in 226ms :: {"id":9,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:55:36 PM [express] GET /api/conversations 200 in 47ms :: [{"id":9,"userId":"custom_1753302608546_3…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:55:37 PM [express] GET /api/conversations/9 200 in 63ms :: {"id":9,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:56:00 PM [express] POST /api/conversations/9/messages 200 in 214ms :: {"id":14,"conversationId":9,…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:56:00 PM [express] GET /api/conversations/9 200 in 65ms :: {"id":9,"userId":"custom_1753302608546_…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:56:12 PM [express] POST /api/conversations/9/messages 200 in 201ms :: {"id":15,"conversationId":9,…
+getCurrentUser called: {
+  hasSession: true,
+  sessionUser: true,
+  hasReqUser: false,
+  sessionId: 'AFmUN48kzPkTw9eeIvBJOsnN4KzhbRmc'
+}
+Found session user: custom_1753302608546_3nlmb6nnq
+8:56:13 PM [express] GET /api/conversations/9 200 in 59ms :: {"id":9,"userId":"custom_1753302608546_…

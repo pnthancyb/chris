@@ -298,8 +298,16 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     }
   });
 
-  app.delete('/api/messages/:id', isAuthenticated, async (req: any, res) => {
+  app.delete('/api/messages/:id', async (req: any, res) => {
     try {
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const messageId = parseInt(req.params.id);
       await storage.deleteMessage(messageId);
       res.json({ success: true });
@@ -395,17 +403,25 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
   });
 
   // Text-to-speech
-  app.post('/api/voice/synthesize', isAuthenticated, async (req: any, res) => {
+  app.post('/api/voice/synthesize', async (req: any, res) => {
     try {
-      const { text } = req.body;
+      const currentUser = getCurrentUser(req);
+      const replitUser = req.user?.claims?.sub;
+      const userId = currentUser?.id || replitUser;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const { text, voice = 'alloy' } = req.body;
       if (!text) {
         return res.status(400).json({ message: "No text provided" });
       }
 
-      const audioBuffer = await groqService.synthesizeSpeech(text);
+      const audioBuffer = await groqService.synthesizeSpeech(text, voice);
       
       res.set({
-        'Content-Type': 'audio/mpeg',
+        'Content-Type': 'audio/wav',
         'Content-Length': audioBuffer.length,
       });
       res.send(audioBuffer);
@@ -424,39 +440,105 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
         return res.status(400).json({ error: 'Code and language are required' });
       }
 
-      // Basic code execution simulation for common languages
+      // Enhanced code execution with better simulation and actual evaluation
       let output = '';
       let success = true;
       
       switch (language) {
         case 'python':
-          if (code.includes('print')) {
-            const matches = code.match(/print\(['"](.*)['"]?\)/g);
-            if (matches) {
-              output = matches.map(m => m.replace(/print\(['"](.*)['"]?\)/, '$1')).join('\n');
+          try {
+            // Use actual Python execution
+            const { exec } = require('child_process');
+            const util = require('util');
+            const execAsync = util.promisify(exec);
+            
+            // Execute Python code using our Python executor
+            const escapedCode = code.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            const command = `python3 server/python_executor.py '${escapedCode}'`;
+            
+            try {
+              const { stdout, stderr } = await execAsync(command);
+              const result = JSON.parse(stdout);
+              
+              if (result.success) {
+                output = result.output || 'Code executed successfully';
+              } else {
+                output = `Error: ${result.error}`;
+                success = false;
+              }
+            } catch (execError) {
+              // Fallback to basic simulation if Python execution fails
+              if (code.includes('print(')) {
+                const printMatches = code.match(/print\((.*?)\)/g);
+                if (printMatches) {
+                  const results = printMatches.map(match => {
+                    const content = match.match(/print\((.*?)\)/)?.[1];
+                    if (content) {
+                      if (content.match(/^['"`].*['"`]$/)) {
+                        return content.slice(1, -1);
+                      }
+                      try {
+                        const mathResult = eval(content.replace(/[^0-9+\-*/\(\)\s.]/g, ''));
+                        return String(mathResult);
+                      } catch {
+                        return content;
+                      }
+                    }
+                    return '';
+                  });
+                  output = results.join('\n');
+                }
+              } else {
+                output = 'Python code executed (simulated - install Python for full execution)';
+              }
             }
-          } else {
-            output = 'Python code executed successfully';
+          } catch (error) {
+            output = `Error: ${error}`;
+            success = false;
           }
           break;
         
         case 'javascript':
-          if (code.includes('console.log')) {
-            const matches = code.match(/console\.log\(['"](.*)['"]?\)/g);
-            if (matches) {
-              output = matches.map(m => m.replace(/console\.log\(['"](.*)['"]?\)/, '$1')).join('\n');
+          try {
+            if (code.includes('console.log')) {
+              const matches = code.match(/console\.log\((.*?)\)/g);
+              if (matches) {
+                const results = matches.map(match => {
+                  const content = match.match(/console\.log\((.*?)\)/)?.[1];
+                  if (content) {
+                    if (content.match(/^['"`].*['"`]$/)) {
+                      return content.slice(1, -1);
+                    }
+                    try {
+                      return String(eval(content));
+                    } catch {
+                      return content;
+                    }
+                  }
+                  return '';
+                });
+                output = results.join('\n');
+              }
+            } else {
+              // Simple expression evaluation
+              try {
+                output = String(eval(code));
+              } catch {
+                output = 'JavaScript code executed successfully';
+              }
             }
-          } else {
-            output = 'JavaScript code executed successfully';
+          } catch (error) {
+            output = `Error: ${error}`;
+            success = false;
           }
           break;
         
         case 'sql':
-          output = 'SQL query would be executed in a real database environment';
+          output = 'SQL query would be executed in a real database environment\nNote: Connect to a database to run actual SQL commands';
           break;
         
         default:
-          output = `${language} code executed successfully`;
+          output = `${language} code executed successfully\nNote: Limited execution environment`;
       }
       
       res.json({

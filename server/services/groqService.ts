@@ -172,28 +172,17 @@ class GroqService {
     }
   }
 
-  async synthesizeSpeech(text: string): Promise<Buffer> {
+  async synthesizeSpeech(text: string, voice: string = 'alloy'): Promise<Buffer> {
     try {
-      // Note: Groq doesn't have native TTS, so we'd need to integrate with PlayAI or another service
-      // For now, returning a placeholder - in production, integrate with PlayAI TTS API
-      const playaiResponse = await fetch("https://api.playai.com/v1/tts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.PLAYAI_API_KEY || process.env.PLAYAI_API_KEY_ENV_VAR || "default_key"}`,
-        },
-        body: JSON.stringify({
-          text,
-          voice: "default",
-          format: "mp3",
-        }),
+      // Use Groq's TTS with PlayAI model
+      const response = await groq.audio.speech.create({
+        model: 'playai-tts',
+        voice: voice,
+        input: text.slice(0, 10000), // Max 10K characters as per API
+        response_format: 'wav',
       });
 
-      if (!playaiResponse.ok) {
-        throw new Error("TTS API request failed");
-      }
-
-      return Buffer.from(await playaiResponse.arrayBuffer());
+      return Buffer.from(await response.arrayBuffer());
     } catch (error) {
       console.error("Error synthesizing speech:", error);
       throw new Error("Failed to synthesize speech");

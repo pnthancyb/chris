@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useAudioRecording } from '@/hooks/useAudioRecording';
 import { FileUpload } from './FileUpload';
+import { VoiceRecorderButton } from './VoiceRecorderButton';
 import { 
   Send, 
   Mic, 
@@ -180,17 +181,15 @@ export function ChatInput({ onSendMessage, isLoading, disabled }: ChatInputProps
           </Button>
 
           {/* Voice Recording Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleVoiceRecording}
-            disabled={disabled || isProcessing}
-            className={`text-slate-500 hover:text-slate-700 ${
-              isRecording ? 'bg-red-100 text-red-600 animate-pulse' : ''
-            }`}
-          >
-            {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-          </Button>
+          <VoiceRecorderButton 
+            onTranscription={(text) => {
+              setMessage(prev => prev + (prev ? ' ' : '') + text);
+              if (textareaRef.current) {
+                textareaRef.current.focus();
+              }
+            }}
+            isLoading={disabled}
+          />
 
           {/* Text Input */}
           <div className="flex-1 relative">

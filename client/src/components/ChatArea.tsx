@@ -47,6 +47,24 @@ export function ChatArea({
 }: ChatAreaProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    const chatArea = document.getElementById('chatArea');
+    if (chatArea) {
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+  }, [messages, streamingMessage]);
+
+  // Also scroll when component mounts
+  useEffect(() => {
+    const chatArea = document.getElementById('chatArea');
+    if (chatArea) {
+      setTimeout(() => {
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }, 100);
+    }
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -100,7 +118,7 @@ export function ChatArea({
       </header>
 
       {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4" id="chatArea">
+      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 max-h-[calc(100vh-200px)]" id="chatArea">
         <AnimatePresence>
           {messages.length === 0 && !isLoading && (
             <motion.div
