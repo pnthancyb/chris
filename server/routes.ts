@@ -249,7 +249,13 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       }
 
       const conversationId = parseInt(req.params.id);
+      
+      // First delete all messages in the conversation
+      await storage.deleteConversationMessages(conversationId);
+      
+      // Then delete the conversation itself
       await storage.deleteConversation(conversationId, userId);
+      
       res.json({ success: true });
     } catch (error) {
       console.error("Error deleting conversation:", error);
@@ -450,32 +456,49 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
 
       // Check if file extension is supported by Groq
       const supportedFormats = ['flac', 'mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'ogg', 'opus', 'wav', 'webm'];
-      const fileExtension = path.extname(audioFile.originalname).slice(1).toLowerCase();
+      const fileExtension = path.extname(audioFile.originalname || audioFile.filename).slice(1).toLowerCase() || 'webm';
       
       let processedPath = audioFile.path;
       
-      if (!supportedFormats.includes(fileExtension)) {
-        // Try to convert using ffmpeg if available
-        try {
+      // Always convert to wav for better compatibility
+      try {
+        const convertedPath = audioFile.path + '.wav';
+        
+        await new Promise((resolve, reject) => {
           const { spawn } = require('child_process');
-          const convertedPath = audioFile.path + '.wav';
+          const ffmpeg = spawn('ffmpeg', [
+            '-i', audioFile.path,
+            '-acodec', 'pcm_s16le',
+            '-ar', '16000',
+            '-ac', '1',
+            '-y',
+            convertedPath
+          ]);
           
-          await new Promise((resolve, reject) => {
-            const ffmpeg = spawn('ffmpeg', ['-i', audioFile.path, '-acodec', 'pcm_s16le', '-ar', '16000', convertedPath]);
-            ffmpeg.on('close', (code) => {
-              if (code === 0) {
-                processedPath = convertedPath;
-                resolve(code);
-              } else {
-                reject(new Error(`ffmpeg conversion failed with code ${code}`));
-              }
-            });
-            ffmpeg.on('error', reject);
+          ffmpeg.stderr.on('data', (data) => {
+            console.log('FFmpeg stderr:', data.toString());
           });
-        } catch (conversionError) {
-          console.warn('Audio conversion failed:', conversionError);
+          
+          ffmpeg.on('close', (code) => {
+            if (code === 0 && fs.existsSync(convertedPath)) {
+              processedPath = convertedPath;
+              resolve(code);
+            } else {
+              reject(new Error(`ffmpeg conversion failed with code ${code}`));
+            }
+          });
+          
+          ffmpeg.on('error', (error) => {
+            console.error('FFmpeg error:', error);
+            reject(error);
+          });
+        });
+      } catch (conversionError) {
+        console.warn('Audio conversion failed, trying original file:', conversionError);
+        // If conversion fails, try original file if it's in supported format
+        if (!supportedFormats.includes(fileExtension)) {
           return res.status(400).json({ 
-            message: `Unsupported audio format: ${fileExtension}. Supported formats: ${supportedFormats.join(', ')}`
+            message: `Audio conversion failed and format ${fileExtension} is not supported. Supported formats: ${supportedFormats.join(', ')}`
           });
         }
       }
@@ -483,9 +506,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       const transcription = await groqService.transcribeAudio(processedPath);
 
       // Clean up temp files
-      fs.unlinkSync(audioFile.path);
-      if (processedPath !== audioFile.path && fs.existsSync(processedPath)) {
-        fs.unlinkSync(processedPath);
+      try {
+        if (fs.existsSync(audioFile.path)) {
+          fs.unlinkSync(audioFile.path);
+        }
+        if (processedPath !== audioFile.path && fs.existsSync(processedPath)) {
+          fs.unlinkSync(processedPath);
+        }
+      } catch (cleanupError) {
+        console.warn('Failed to clean up temp files:', cleanupError);
       }
 
       res.json({ text: transcription });
@@ -700,9 +729,26 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
           const { conversationId, content, model, thinkingMode, files } = message;
 
           // Get AI response
+          // Prepare messages with system prompt for better formatting
+          const systemPrompt = `You are ChrisAI, an advanced AI assistant. Format your responses clearly and professionally:
+
+1. Use proper paragraph breaks for readability
+2. Structure information logically with clear sections
+3. Use bullet points or numbered lists when appropriate
+4. Keep paragraphs concise (3-4 sentences max)
+5. Use markdown formatting for emphasis when needed
+6. Provide clear, well-organized responses that are easy to read
+
+Always aim for clarity and readability in your responses.`;
+
+          const formattedMessages = [
+            { role: 'system' as const, content: systemPrompt },
+            { role: 'user' as const, content }
+          ];
+
           const response = await groqService.getChatCompletion({
             model: model || 'llama-3.3-70b-versatile',
-            messages: [{ role: 'user', content }],
+            messages: formattedMessages,
             stream: true,
             thinkingMode,
           });

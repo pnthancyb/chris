@@ -12,6 +12,27 @@ import os
 
 class PythonExecutor:
     def __init__(self):
+        # Try to import scientific libraries safely
+        available_modules = {
+            'math': __import__('math'),
+            'random': __import__('random'),
+            'datetime': __import__('datetime'),
+            'json': __import__('json'),
+        }
+        
+        # Try to add scientific computing libraries if available
+        try:
+            available_modules['numpy'] = __import__('numpy')
+            available_modules['np'] = available_modules['numpy']
+        except ImportError:
+            pass
+            
+        try:
+            available_modules['pandas'] = __import__('pandas')
+            available_modules['pd'] = available_modules['pandas']
+        except ImportError:
+            pass
+            
         self.globals_dict = {
             '__builtins__': {
                 'print': print,
@@ -42,8 +63,6 @@ class PythonExecutor:
                 'hasattr': hasattr,
                 'getattr': getattr,
                 'setattr': setattr,
-                'dir': dir,
-                'help': help,
                 'chr': chr,
                 'ord': ord,
                 'bin': bin,
@@ -52,12 +71,11 @@ class PythonExecutor:
                 'pow': pow,
                 'divmod': divmod,
                 'slice': slice,
-            },
-            'math': __import__('math'),
-            'random': __import__('random'),
-            'datetime': __import__('datetime'),
-            'json': __import__('json'),
+            }
         }
+        
+        # Add available modules
+        self.globals_dict.update(available_modules)
         
     def is_safe_code(self, code):
         """Basic safety check for code execution"""
@@ -66,20 +84,35 @@ class PythonExecutor:
             'import shutil', 'import glob', 'import socket',
             'exec(', 'eval(', '__import__', 'open(',
             'file(', 'input(', 'raw_input(', 'compile(',
-            'reload(', 'delattr(', 'dir(', 'vars(',
-            'locals(', 'globals(', '__builtins__'
+            'reload(', 'delattr(', '__builtins__',
+            'while True:', 'for i in range(999999)'
         ]
         
         code_lower = code.lower()
+        
+        # Allow basic scientific computing imports
+        allowed_imports = ['math', 'random', 'datetime', 'json', 'numpy', 'pandas', 'matplotlib']
+        
+        # Check for dangerous patterns
         for pattern in dangerous_patterns:
             if pattern in code_lower:
                 return False
         
-        # Additional checks for file operations and network
-        forbidden_keywords = ['file', 'socket', 'urllib', 'requests', 'http']
-        for keyword in forbidden_keywords:
-            if keyword in code_lower and ('import' in code_lower or 'from' in code_lower):
-                return False
+        # Check imports more carefully
+        import_lines = [line.strip() for line in code.split('\n') if 'import' in line.lower()]
+        for line in import_lines:
+            line_lower = line.lower()
+            if 'import' in line_lower:
+                # Extract the module name
+                if 'from' in line_lower:
+                    parts = line_lower.split('from')[1].split('import')[0].strip()
+                else:
+                    parts = line_lower.split('import')[1].strip()
+                
+                module_name = parts.split('.')[0].split(' ')[0]
+                
+                if module_name not in allowed_imports and module_name not in self.globals_dict:
+                    return False
                 
         return True
     

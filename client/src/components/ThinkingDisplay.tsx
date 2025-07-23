@@ -1,64 +1,73 @@
-import { motion } from 'framer-motion';
-import { Brain, Lightbulb } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Brain, Loader2, ChevronDown, ChevronUp, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ThinkingDisplayProps {
-  content: string;
+  content?: string;
+  isVisible?: boolean;
   isStreaming?: boolean;
+  thinkingTime?: number;
 }
 
-export function ThinkingDisplay({ content, isStreaming }: ThinkingDisplayProps) {
-  if (!content) return null;
+export function ThinkingDisplay({ 
+  content, 
+  isVisible = true, 
+  isStreaming = false,
+  thinkingTime = 0
+}: ThinkingDisplayProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  if (!isVisible || !content) return null;
+
+  const formatTime = (seconds: number) => {
+    if (seconds < 60) return `${seconds}s`;
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-3"
-    >
-      <div className="flex items-center space-x-2 mb-2">
-        <div className="relative">
-          <Brain className="w-4 h-4 text-amber-600" />
-          {isStreaming && (
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="absolute inset-0"
-            >
-              <Lightbulb className="w-4 h-4 text-amber-400" />
-            </motion.div>
+    <div className="mx-4 mb-4">
+      <Button
+        variant="outline"
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center justify-between bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-800"
+      >
+        <div className="flex items-center space-x-2">
+          <Brain className="w-4 h-4" />
+          <span className="text-sm font-medium">
+            {isStreaming ? 'AI is thinking...' : 'View AI Reasoning'}
+          </span>
+          {isStreaming && <Loader2 className="w-4 h-4 animate-spin" />}
+          {!isStreaming && thinkingTime > 0 && (
+            <div className="flex items-center space-x-1 text-xs text-blue-600">
+              <Clock className="w-3 h-3" />
+              <span>{formatTime(thinkingTime)}</span>
+            </div>
           )}
         </div>
-        <span className="text-sm font-medium text-amber-800">
-          AI Reasoning {isStreaming && <span className="animate-pulse">...</span>}
-        </span>
-      </div>
-      
-      <div className="text-sm text-amber-700 prose prose-sm prose-amber max-w-none">
-        {content.split('\n').map((line, index) => {
-          if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
-            return (
-              <div key={index} className="flex items-start space-x-2 my-1">
-                <span className="text-amber-500 mt-0.5">•</span>
-                <span>{line.replace(/^[•\-]\s*/, '')}</span>
-              </div>
-            );
-          }
-          
-          if (line.trim() === '') {
-            return <br key={index} />;
-          }
-          
-          return (
-            <p key={index} className="mb-2 last:mb-0">
-              {isStreaming && index === content.split('\n').length - 1 ? (
-                <span className="typing-animation">{line}</span>
-              ) : (
-                line
-              )}
-            </p>
-          );
-        })}
-      </div>
-    </motion.div>
+        {isExpanded ? (
+          <ChevronUp className="w-4 h-4" />
+        ) : (
+          <ChevronDown className="w-4 h-4" />
+        )}
+      </Button>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="bg-blue-50 border border-blue-200 border-t-0 rounded-b-lg p-4 overflow-hidden"
+          >
+            <div className="text-sm text-blue-700 whitespace-pre-wrap max-h-60 overflow-y-auto">
+              {content}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
