@@ -56,9 +56,9 @@ export function ChatArea({
   }, [messages, streamingMessage]);
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-4">
+      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h2 className="text-lg font-semibold">Chat with ChrisAI</h2>
@@ -100,7 +100,7 @@ export function ChatArea({
       </header>
 
       {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" id="chatArea">
+      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4" id="chatArea">
         <AnimatePresence>
           {messages.length === 0 && !isLoading && (
             <motion.div
@@ -183,17 +183,16 @@ export function ChatArea({
             </motion.div>
           )}
 
-          {/* Loading indicator */}
+          {/* Loading indicator - Light animation */}
           {isLoading && !streamingMessage && !thinkingContent && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex items-center justify-center py-4"
+              className="flex items-center justify-start py-4"
             >
-              <div className="flex space-x-2">
-                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+              <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-900/20 dark:to-emerald-900/20 rounded-2xl">
+                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-sm text-slate-600 dark:text-slate-300">ChrisAI is thinking...</span>
               </div>
             </motion.div>
           )}

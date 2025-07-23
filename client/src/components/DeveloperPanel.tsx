@@ -37,7 +37,7 @@ export function DeveloperPanel({
     try {
       setExecutionOutput('Executing code...\n');
       await onCodeExecution(currentCode);
-    } catch (error) {
+    } catch (error: any) {
       setExecutionOutput(`Error: ${error.message}\n`);
     } finally {
       setIsExecuting(false);

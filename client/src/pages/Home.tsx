@@ -256,11 +256,35 @@ export default function Home() {
 
   // Handle new chat
   const handleNewChat = useCallback(() => {
+    // Clear current conversation data immediately
     setCurrentConversationId(undefined);
+    setMessages([]);
+    setStreamingMessage('');
+    setThinkingContent('');
+    setIsLoading(false);
+    
     if (isMobile) {
       setSidebarOpen(false);
     }
-  }, [isMobile]);
+    
+    // Create a new conversation for better UX
+    createConversationMutation.mutate(
+      { title: 'New Conversation' },
+      {
+        onSuccess: (conversation) => {
+          setCurrentConversationId(conversation.id);
+        },
+        onError: (error) => {
+          console.error('Failed to create new conversation:', error);
+          toast({
+            title: 'Error',
+            description: 'Failed to create new conversation',
+            variant: 'destructive',
+          });
+        },
+      }
+    );
+  }, [isMobile, createConversationMutation, toast]);
 
   // Handle message editing
   const handleMessageEdit = useCallback(async (messageId: number, newContent: string) => {
@@ -393,7 +417,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900">
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isMobile && sidebarOpen && (
@@ -426,7 +450,7 @@ export default function Home() {
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 h-full">
         {/* Mobile Header */}
         {isMobile && (
           <div className="bg-white border-b border-slate-200 px-4 py-3 md:hidden">
@@ -534,7 +558,10 @@ export default function Home() {
               <span>Settings</span>
             </DialogTitle>
           </DialogHeader>
-          <SettingsPanel />
+          <SettingsPanel 
+          isOpen={isSettingsOpen} 
+          onClose={() => setIsSettingsOpen(false)} 
+        />
         </DialogContent>
       </Dialog>
 

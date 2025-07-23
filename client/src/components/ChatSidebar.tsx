@@ -40,6 +40,7 @@ const AI_MODELS = [
   { value: 'llama3-70b-8192', label: 'Llama 3 70B', icon: '🦙' },
   { value: 'mistral-saba-24b', label: 'Mistral Saba 24B', icon: '🌬️' },
   { value: 'gemma2-9b-it', label: 'Gemma 2 9B', icon: '💎' },
+  { value: 'moonshotai/kimi-k2-instruct', label: 'Kimi K2 Instruct', icon: '🌙' },
 ];
 
 export function ChatSidebar({ 

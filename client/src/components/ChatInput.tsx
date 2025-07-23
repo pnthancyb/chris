@@ -132,7 +132,7 @@ export function ChatInput({ onSendMessage, isLoading, disabled }: ChatInputProps
   const isAtLimit = characterCount >= maxCharacters;
 
   return (
-    <div className="bg-white border-t border-slate-200 px-6 py-4">
+    <div className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex-shrink-0">
       <div className="max-w-4xl mx-auto">
         {/* File Upload Preview */}
         <AnimatePresence>

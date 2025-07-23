@@ -105,7 +105,7 @@ export function FileUpload({
       }, 200);
 
       await response.json();
-    } catch (error) {
+    } catch (error: any) {
       setUploadingFiles(prev => 
         prev.map(uf => 
           uf.file === file 
