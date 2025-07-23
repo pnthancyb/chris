@@ -57,7 +57,6 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [activeTab, setActiveTab] = useState('chat');
   const [showSettings, setShowSettings] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Local messages state for real-time updates
   const [messages, setMessages] = useState<Message[]>([]);
@@ -579,21 +578,11 @@ export default function Home() {
         onCodeExecution={handleCodeExecution}
       />
 
-      {/* Settings Dialog */}
-      <Dialog open={showSettings} onOpenChange={setShowSettings}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center space-x-2">
-              <Settings className="w-5 h-5" />
-              <span>Settings</span>
-            </DialogTitle>
-          </DialogHeader>
-          <SettingsPanel 
-          isOpen={showSettings} 
-          onClose={() => setShowSettings(false)} 
-        />
-        </DialogContent>
-      </Dialog>
+      {/* Settings Panel */}
+      <SettingsPanel 
+        isOpen={showSettings} 
+        onClose={() => setShowSettings(false)} 
+      />
 
       {/* Connection Status */}
       <AnimatePresence>

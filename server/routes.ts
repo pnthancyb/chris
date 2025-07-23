@@ -128,7 +128,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { rawPrompt, category, tone, length } = req.body;
-      
+
       const optimizePrompt = `You are a prompt engineering expert. Take the following raw prompt and optimize it for better AI responses. Consider the specified category, tone, and length.
 
 Raw prompt: "${rawPrompt}"
@@ -206,7 +206,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
 
       const conversationId = parseInt(req.params.id);
       const conversation = await storage.getConversation(conversationId, userId);
-      
+
       if (!conversation) {
         return res.status(404).json({ message: "Conversation not found" });
       }
@@ -381,7 +381,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
         return res.status(401).json({ message: "Unauthorized" });
       }
       const fileId = parseInt(req.params.id);
-      
+
       const file = await storage.getFile(fileId, userId);
       if (file) {
         // Delete physical file
@@ -417,7 +417,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       }
 
       const transcription = await groqService.transcribeAudio(audioFile.path);
-      
+
       // Clean up temp file
       fs.unlinkSync(audioFile.path);
 
@@ -445,7 +445,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       }
 
       const audioBuffer = await groqService.synthesizeSpeech(text, voice);
-      
+
       res.set({
         'Content-Type': 'audio/wav',
         'Content-Length': audioBuffer.length,
@@ -469,7 +469,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       }
     try {
       const { code, language } = req.body;
-      
+
       if (!code || !language) {
         return res.status(400).json({ error: 'Code and language are required' });
       }
@@ -477,7 +477,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
       // Enhanced code execution with better simulation and actual evaluation
       let output = '';
       let success = true;
-      
+
       switch (language) {
         case 'python':
           try {
@@ -485,15 +485,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
             const { exec } = require('child_process');
             const util = require('util');
             const execAsync = util.promisify(exec);
-            
+
             // Execute Python code using our Python executor
             const escapedCode = code.replace(/'/g, "\\'").replace(/"/g, '\\"');
             const command = `python3 server/python_executor.py '${escapedCode}'`;
-            
+
             try {
               const { stdout, stderr } = await execAsync(command);
               const result = JSON.parse(stdout);
-              
+
               if (result.success) {
                 output = result.output || 'Code executed successfully';
               } else {
@@ -531,7 +531,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
             success = false;
           }
           break;
-        
+
         case 'javascript':
           try {
             if (code.includes('console.log')) {
@@ -566,15 +566,15 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
             success = false;
           }
           break;
-        
+
         case 'sql':
           output = 'SQL query would be executed in a real database environment\nNote: Connect to a database to run actual SQL commands';
           break;
-        
+
         default:
           output = `${language} code executed successfully\nNote: Limited execution environment`;
       }
-      
+
       res.json({
         success,
         output,
@@ -629,10 +629,10 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
     ws.on('message', async (data) => {
       try {
         const message = JSON.parse(data.toString());
-        
+
         if (message.type === 'chat') {
           const { conversationId, content, model, thinkingMode, files } = message;
-          
+
           // Get AI response
           const response = await groqService.getChatCompletion({
             model: model || 'llama-3.3-70b-versatile',
@@ -642,7 +642,7 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and eff
           });
 
           let fullContent = '';
-          
+
           // Stream response back to client
           if (response.stream) {
             for await (const chunk of response.stream) {

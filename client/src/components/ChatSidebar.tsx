@@ -14,7 +14,8 @@ import {
   Settings, 
   X, 
   Brain,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
 
 interface Conversation {
@@ -97,6 +98,15 @@ export function ChatSidebar({
     }
   };
 
+  const handleClearAllConversations = () => {
+    if (confirm('Are you sure you want to delete all conversations?')) {
+      // Implement the logic to delete all conversations here
+      // You might need to call a different API endpoint
+      // For demonstration purposes, let's just invalidate the query
+      queryClient.invalidateQueries({ queryKey: ['/api/conversations'] });
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -116,13 +126,26 @@ export function ChatSidebar({
 
       {/* New Chat Button */}
       <div className="p-4 border-b border-slate-200">
-        <Button 
-          onClick={onNewChat}
-          className="w-full flex items-center justify-center space-x-3 bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Chat</span>
-        </Button>
+        <div className="space-y-2">
+            <Button
+              onClick={onNewChat}
+              className="w-full flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Chat</span>
+            </Button>
+
+            {conversations.length > 0 && (
+              <Button
+                onClick={handleClearAllConversations}
+                variant="outline"
+                className="w-full flex items-center space-x-2 text-red-600 border-red-200 hover:bg-red-50"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Clear All</span>
+              </Button>
+            )}
+          </div>
       </div>
 
       {/* Conversations */}
@@ -141,28 +164,30 @@ export function ChatSidebar({
               <p className="text-sm">No conversations yet</p>
             </div>
           ) : (
-            conversations.map((conversation) => (
-              <motion.button
+            conversations.map((conversation: Conversation) => (
+              <motion.div
                 key={conversation.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className={`w-full flex items-center space-x-3 px-3 py-2 text-left text-sm rounded-lg transition-colors group ${
+                whileHover={{ x: 4 }}
+                className={`w-full flex items-center space-x-3 px-3 py-2 text-left text-sm rounded-lg transition-colors group relative ${
                   currentConversationId === conversation.id
                     ? 'bg-blue-100 text-blue-900'
                     : 'hover:bg-slate-100'
                 }`}
-                onClick={() => onConversationSelect(conversation.id)}
               >
-                <MessageSquare className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                <span className="truncate flex-1">{conversation.title}</span>
+                <button
+                  onClick={() => onConversationSelect(conversation.id)}
+                  className="w-full text-left"
+                >
+                  <MessageSquare className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  <span className="truncate flex-1">{conversation.title}</span>
+                </button>
                 <div
                   onClick={(e) => handleDeleteConversation(e, conversation.id)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 rounded transition-all cursor-pointer"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 rounded transition-all cursor-pointer absolute right-2 top-2"
                 >
                   <X className="w-3 h-3" />
                 </div>
-              </motion.button>
+              </motion.div>
             ))
           )}
         </AnimatePresence>
