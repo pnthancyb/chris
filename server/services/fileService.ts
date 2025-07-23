@@ -1,5 +1,3 @@
-# Analyze the code changes and generate the modified code file.
-# The goal is to enhance PDF processing capabilities by adding pdf-parse library and improving the extractPdfText function.
 
 import fs from 'fs';
 import path from 'path';
@@ -94,10 +92,6 @@ ${data.text.trim()}`;
 
       // Try using pdftotext (part of poppler-utils) as fallback
       try {
-        const { exec } = require('child_process');
-        const util = require('util');
-        const execAsync = util.promisify(exec);
-
         const { stdout } = await execAsync(`pdftotext "${filePath}" -`);
         if (stdout && stdout.trim()) {
           const fileName = path.basename(filePath);
@@ -132,7 +126,6 @@ To enable full PDF text extraction, ensure that pdf-parse library is properly in
     try {
       // Try using Python script for PDF extraction
       try {
-        const { spawn } = require('child_process');
         const pythonScript = `
 import sys
 try:

@@ -534,9 +534,9 @@ export default function Home() {
               streamingMessage={streamingMessage}
               thinkingContent={thinkingContent}
               thinkingMode={thinkingMode}
-              devMode={devMode}
+              devMode={isDeveloperPanelOpen}
               onThinkingToggle={() => setThinkingMode(!thinkingMode)}
-              onDevModeToggle={() => setDevMode(!devMode)}
+              onDevModeToggle={() => setIsDeveloperPanelOpen(!isDeveloperPanelOpen)}
               onClearChat={handleClearChat}
               onMessageEdit={handleMessageEdit}
               onMessageDelete={handleMessageDelete}
@@ -573,17 +573,23 @@ export default function Home() {
 
       {/* Developer Panel */}
       <DeveloperPanel
-        isOpen={devMode}
-        onClose={() => setDevMode(false)}
+        isOpen={isDeveloperPanelOpen}
+        onClose={() => setIsDeveloperPanelOpen(false)}
         currentCode={currentCode}
         onCodeExecution={handleCodeExecution}
       />
 
       {/* Settings Panel */}
       <SettingsPanel 
-        isOpen={showSettings} 
-        onClose={() => setShowSettings(false)} 
-      />
+            isOpen={showSettings} 
+            onClose={() => setShowSettings(false)}
+            selectedModel={selectedModel}
+            onModelChange={setSelectedModel}
+            thinkingMode={thinkingMode}
+            onThinkingModeChange={setThinkingMode}
+            devMode={isDeveloperPanelOpen}
+            onDevModeChange={setIsDeveloperPanelOpen}
+          />
 
       {/* Connection Status */}
       <AnimatePresence>
